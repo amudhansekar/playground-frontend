@@ -52,10 +52,10 @@ function PlaygroundNavbar(): JSX.Element {
         ) : (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Link href="/login">Login</Link>
+              <Link href="/api/auth/signin">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button color="primary" href="#" variant="flat">
+              <Button color="primary" href="/api/auth/signin" variant="flat">
                 Sign Up
               </Button>
             </NavbarItem>
