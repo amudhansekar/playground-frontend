@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <main>
+          <main className="light text-foreground bg-background">
             <PlaygroundNavbar />
             {children}
             <Footer />
