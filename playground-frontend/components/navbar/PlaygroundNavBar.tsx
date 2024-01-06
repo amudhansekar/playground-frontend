@@ -18,7 +18,7 @@ import SearchInput from '../search/SearchInput';
 function PlaygroundNavbar(): JSX.Element {
   const isLoggedIn = false;
   return (
-    <Navbar>
+    <Navbar className="py-2 border-4">
       <NavbarBrand>
         <Link href="/" color="foreground">
           {/* <PlaygroundLogo /> */}

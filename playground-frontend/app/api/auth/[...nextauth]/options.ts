@@ -30,7 +30,9 @@ const authOptions: NextAuthOptions = {
     }) {
       const { token, user, account, profile, trigger, isNewUser, session } =
         params;
-      token.token_set = account;
+      if (account) {
+        token.token_set = account;
+      }
       return token;
     },
 
