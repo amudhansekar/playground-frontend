@@ -5,13 +5,13 @@ import TeamInstanceApiResponseFullDto from '@/models/team/team-instance-api-resp
 interface GameApiResponseFullDto {
   id: number;
 
-  start_date: string;
+  startDate: string;
 
-  sport_type: SportType;
+  sportType: SportType;
 
-  game_state: GameState;
+  gameState: GameState;
 
-  team_instances: TeamInstanceApiResponseFullDto[];
+  teamInstances: TeamInstanceApiResponseFullDto[];
 
   end_date?: string;
 }

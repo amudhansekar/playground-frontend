@@ -35,8 +35,8 @@ class Player {
   ): Player {
     return new Player(
       dto.id,
-      dto.first_name,
-      dto.last_name,
+      dto.firstName,
+      dto.lastName,
       dto.age,
       dto.height,
       dto.weight
@@ -45,8 +45,9 @@ class Player {
 
   convertToPlayerApiRequestSaveDto(): PlayerApiRequestSaveDto {
     return {
-      first_name: this.firstName,
-      last_name: this.lastName,
+      id: this.id,
+      firstName: this.firstName,
+      lastName: this.lastName,
       age: this.age,
       height: this.height,
       weight: this.weight,

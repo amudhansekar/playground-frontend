@@ -42,8 +42,8 @@ class TeamInstance {
         Player.convertFromPlayerApiResponseFullDto(playerDto)
       ),
       dto.description,
-      dto.team_id,
-      keysToCamelCase(dto.attributes)
+      dto.teamId,
+      dto.attributes
     );
   }
 
@@ -52,9 +52,9 @@ class TeamInstance {
       id: this.id,
       name: this.name,
       description: this.description,
-      player_ids: this.players.map((player) => player.id),
-      team_id: this.teamId,
-      attributes: keysToSnakeCase(this.attributes),
+      playerIds: this.players.map((player) => player.id),
+      teamId: this.teamId,
+      attributes: this.attributes,
     };
   }
 }

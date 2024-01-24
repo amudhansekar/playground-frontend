@@ -1,9 +1,9 @@
 interface PlayerApiResponseFullDto {
   id: number;
 
-  first_name: string;
+  firstName: string;
 
-  last_name: string;
+  lastName: string;
 
   age?: number;
 

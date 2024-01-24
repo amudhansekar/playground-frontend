@@ -1,7 +1,9 @@
 interface PlayerApiRequestSaveDto {
-  first_name: string;
+  id?: number;
 
-  last_name: string;
+  firstName: string;
+
+  lastName: string;
 
   age?: number;
 

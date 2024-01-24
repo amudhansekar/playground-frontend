@@ -25,9 +25,9 @@ class GameInput {
     }
 
     return {
-      start_date: this.startDate.toISOString(),
-      sport_type: this.sportType,
-      team_instances: this.teamInstances.map((teamInstance) =>
+      startDate: this.startDate.toISOString(),
+      sportType: this.sportType,
+      teamInstances: this.teamInstances.map((teamInstance) =>
         teamInstance.convertToTeamInstanceApiRequestSaveDto()
       ),
     };

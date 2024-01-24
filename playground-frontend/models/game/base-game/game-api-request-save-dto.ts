@@ -2,13 +2,13 @@ import SportType from '@/common/constants/sport-type';
 import TeamInstanceApiRequestSaveDto from '@/models/team/team-instance-api-request-save-dto';
 
 interface GameApiRequestSaveDto {
-  start_date: string;
+  id?: number;
 
-  sport_type: SportType;
+  startDate: string;
 
-  team_instances: TeamInstanceApiRequestSaveDto[];
+  sportType: SportType;
 
-  end_date?: string;
+  teamInstances: TeamInstanceApiRequestSaveDto[];
 }
 
 export default GameApiRequestSaveDto;

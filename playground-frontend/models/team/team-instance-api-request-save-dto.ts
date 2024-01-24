@@ -5,9 +5,9 @@ interface TeamInstanceApiRequestSaveDto {
 
   description?: string;
 
-  player_ids: number[];
+  playerIds: number[];
 
-  team_id?: number;
+  teamId?: number;
 
   attributes: object;
 }

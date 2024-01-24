@@ -25,18 +25,30 @@ async function fetchData(data: string, inputHeaders?: object): Promise<any> {
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
-async function query(query: string, headers?: object): Promise<any> {
+async function query(
+  query: string,
+  headers?: object
+): Promise<GraphQLResponse> {
   const body = JSON.stringify({
     query: query,
   });
   return await fetchData(body, headers);
 }
 
-async function mutate(mutation: string, headers: object): Promise<any> {
+async function mutate(
+  mutation: string,
+  headers: object
+): Promise<GraphQLResponse> {
   const body = JSON.stringify({
     mutation: mutation,
   });
   return await fetchData(body, headers);
 }
 
+interface GraphQLResponse {
+  data: any;
+  errors: any;
+}
+
 export { query, mutate };
+export type { GraphQLResponse };

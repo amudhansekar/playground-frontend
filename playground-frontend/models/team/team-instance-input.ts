@@ -35,8 +35,8 @@ class TeamInstanceInput {
     return {
       name: this.name,
       description: this.description,
-      player_ids: this.players.map((player) => player.id),
-      team_id: this.teamId,
+      playerIds: this.players.map((player) => player.id),
+      teamId: this.teamId,
       attributes: keysToSnakeCase(this.attributes),
     };
   }

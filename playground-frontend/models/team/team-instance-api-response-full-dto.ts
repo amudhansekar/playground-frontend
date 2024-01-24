@@ -9,7 +9,7 @@ interface TeamInstanceApiResponseFullDto {
 
   players: PlayerApiResponseFullDto[];
 
-  team_id?: number;
+  teamId?: number;
 
   attributes: any;
 }
