@@ -1,18 +1,33 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { getData } from '@/common/api/request';
+import { GraphQLResponse, query } from '@/common/api/graphql-request';
 import Player from '@/models/player/player';
+import {
+  ageField,
+  firstNameField,
+  heightField,
+  idField,
+  lastNameField,
+  weightField,
+} from '@/models/player/player-fields';
+import {
+  descriptionField,
+  nameField,
+  playerIdsField,
+} from '@/models/team/team-instance-fields';
+import TeamInstanceInput from '@/models/team/team-instance-input';
 import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
+import { Dispatch, SetStateAction, useState } from 'react';
 import PlayerCard from '../player/PlayerCard';
-import TeamInstanceInput from '@/models/team/team-instance-input';
 
 interface Props {
+  id: string;
   teamInstance: TeamInstanceInput;
   setTeamInstance: Dispatch<SetStateAction<TeamInstanceInput>>;
 }
 
 function TeamInstanceCreator(props: Props): JSX.Element {
-  const { teamInstance, setTeamInstance } = props;
+  const { id, teamInstance, setTeamInstance } = props;
+  let playerIds = teamInstance.players.map((player) => player.id).toString();
 
   function setName(name: string) {
     setTeamInstance(
@@ -57,14 +72,31 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       }
     }
 
-    const response = await getData('/api/player/' + currentPlayerId);
-    const player = Player.convertFromPlayerApiResponseFullDto(response);
+    const playerQuery = {
+      player: {
+        __args: {
+          id: parseInt(currentPlayerId),
+        },
+        [idField]: true,
+        [firstNameField]: true,
+        [lastNameField]: true,
+        [ageField]: true,
+        [heightField]: true,
+        [weightField]: true,
+      },
+    };
 
+    const response: GraphQLResponse = await query(playerQuery);
+    const player = Player.convertFromPlayerApiResponseFullDto(
+      response.data.player
+    );
+
+    const newPlayerArray = [...teamInstance.players, player];
     setTeamInstance(
       (teamInstance) =>
         new TeamInstanceInput(
           teamInstance.name,
-          [...teamInstance.players, player],
+          newPlayerArray,
           teamInstance.description,
           teamInstance.teamId,
           teamInstance.attributes
@@ -72,6 +104,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     );
 
     setCurrentPlayerId(undefined);
+    playerIds = newPlayerArray.map((player) => player.id).toString();
   }
 
   function handleRemovePlayer(index: number) {
@@ -87,12 +120,16 @@ function TeamInstanceCreator(props: Props): JSX.Element {
           teamInstance.attributes
         )
     );
+
+    playerIds = updatedPlayers.map((player) => player.id).toString();
   }
 
   return (
     <div>
       <Input
         className="border-3"
+        id={`${nameField}[${id}]`}
+        name={`${nameField}[${id}]`}
         label="Name"
         value={teamInstance.name || ''}
         onValueChange={setName}
@@ -100,9 +137,17 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       />
       <Input
         className="border-3"
+        id={`${descriptionField}[${id}]`}
+        name={`${descriptionField}[${id}]`}
         label="Description"
         value={teamInstance.description || ''}
         onValueChange={setDescription}
+      />
+      <Input
+        id={`${playerIdsField}[${id}]`}
+        name={`${playerIdsField}[${id}]`}
+        value={playerIds}
+        hidden
       />
       {teamInstance.players.map((player, index) => (
         <div key={index}>

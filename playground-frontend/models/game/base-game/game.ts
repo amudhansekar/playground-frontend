@@ -38,10 +38,10 @@ class Game {
   ): Game {
     return new Game(
       dto.id,
-      new Date(dto.start_date),
-      dto.sport_type,
-      dto.game_state,
-      dto.team_instances.map((teamInstance) =>
+      new Date(dto.startDate),
+      dto.sportType,
+      dto.gameState,
+      dto.teamInstances.map((teamInstance) =>
         TeamInstance.convertFromTeamInstanceApiResponsePublicDto(teamInstance)
       ),
       dto.end_date === undefined ? undefined : new Date(dto.end_date)
@@ -50,13 +50,11 @@ class Game {
 
   convertToGameApiRequestSaveDto(): GameApiRequestSaveDto {
     return {
-      start_date: this.startDate.toISOString(),
-      sport_type: this.sportType,
-      team_instances: this.teamInstances.map((teamInstance) =>
+      startDate: this.startDate.toISOString(),
+      sportType: this.sportType,
+      teamInstances: this.teamInstances.map((teamInstance) =>
         teamInstance.convertToTeamInstanceApiRequestSaveDto()
       ),
-      end_date:
-        this.endDate === undefined ? undefined : this.startDate.toISOString(),
     };
   }
 }

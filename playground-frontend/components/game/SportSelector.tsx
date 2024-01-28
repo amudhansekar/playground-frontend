@@ -19,6 +19,7 @@ function SportSelector(props: Props): JSX.Element {
         selectedKeys={sportType}
         onSelectionChange={setSportType}
         className="max-w-xs"
+        isRequired
       >
         {sportTypes}
       </Select>
