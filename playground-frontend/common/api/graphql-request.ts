@@ -1,4 +1,4 @@
-import PlaygroundApiError from '../error/playground-api-error';
+import { jsonToGraphQLQuery } from 'json-to-graphql-query';
 
 const GRAPHQL_URL = '/graphql';
 
@@ -26,21 +26,23 @@ async function fetchData(data: string, inputHeaders?: object): Promise<any> {
 }
 
 async function query(
-  query: string,
+  query: object,
   headers?: object
 ): Promise<GraphQLResponse> {
+  const graphQLQuery = { query: query };
   const body = JSON.stringify({
-    query: query,
+    query: jsonToGraphQLQuery(graphQLQuery),
   });
   return await fetchData(body, headers);
 }
 
 async function mutate(
-  mutation: string,
+  mutation: object,
   headers: object
 ): Promise<GraphQLResponse> {
+  const graphQLQuery = { mutation: mutation };
   const body = JSON.stringify({
-    mutation: mutation,
+    query: jsonToGraphQLQuery(graphQLQuery),
   });
   return await fetchData(body, headers);
 }
@@ -50,5 +52,5 @@ interface GraphQLResponse {
   errors: any;
 }
 
-export { query, mutate };
+export { mutate, query };
 export type { GraphQLResponse };
