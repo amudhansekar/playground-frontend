@@ -1,13 +1,4 @@
-import { GraphQLResponse, query } from '@/common/api/graphql-request';
 import Player from '@/models/player/player';
-import {
-  ageField,
-  firstNameField,
-  heightField,
-  idField,
-  lastNameField,
-  weightField,
-} from '@/models/player/player-fields';
 import {
   descriptionField,
   nameField,
@@ -72,23 +63,11 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       }
     }
 
-    const playerQuery = {
-      player: {
-        __args: {
-          id: parseInt(currentPlayerId),
-        },
-        [idField]: true,
-        [firstNameField]: true,
-        [lastNameField]: true,
-        [ageField]: true,
-        [heightField]: true,
-        [weightField]: true,
-      },
-    };
-
-    const response: GraphQLResponse = await query(playerQuery);
+    const playerId = parseInt(currentPlayerId);
+    const response = await fetch(`/api/player/${playerId}`);
+    const graphqlData = await response.json();
     const player = Player.convertFromPlayerApiResponseFullDto(
-      response.data.player
+      graphqlData.response.data.player
     );
 
     const newPlayerArray = [...teamInstance.players, player];
