@@ -1,35 +1,44 @@
 'use client';
 
-import { Input } from '@nextui-org/input';
-import { useState } from 'react';
-
-import SportType from '@/common/constants/sport-type';
 import { TwoTeamGameTeamPosition } from '@/common/constants/team-constants';
+import { dateToDatetimeLocalInput } from '@/common/util/date-util';
 import SubmitButton from '@/components/common/SubmitButton/SubmitButton';
 import TeamInstanceCreator from '@/components/team/TeamInstanceCreator';
 import {
+  idField,
   sportTypeField,
   startDateField,
 } from '@/models/game/base-game/game-fields';
+import GameInput from '@/models/game/base-game/game-input';
 import TeamInstanceInput from '@/models/team/team-instance-input';
 import saveGame from '@/server-actions/game/save-game';
+import { Input } from '@nextui-org/input';
+import { useState } from 'react';
 
 interface Props {
-  sportType: SportType;
+  gameInput: GameInput;
 }
 
 function TwoTeamGameCreator(props: Props): JSX.Element {
-  const { sportType } = props;
-  const [startDate, setStartDate] = useState('');
+  const { gameInput } = props;
+  const [startDate, setStartDate] = useState(
+    gameInput.startDate === undefined
+      ? undefined
+      : dateToDatetimeLocalInput(gameInput.startDate)
+  );
   const [awayTeam, setAwayTeam] = useState(
-    new TeamInstanceInput(undefined, [], undefined, undefined, {
-      position: TwoTeamGameTeamPosition.AWAY,
-    })
+    getTeamByPositionOrNewTeamInstance(
+      gameInput,
+      TwoTeamGameTeamPosition.AWAY,
+      'a'
+    )
   );
   const [homeTeam, setHomeTeam] = useState(
-    new TeamInstanceInput(undefined, [], undefined, undefined, {
-      position: TwoTeamGameTeamPosition.HOME,
-    })
+    getTeamByPositionOrNewTeamInstance(
+      gameInput,
+      TwoTeamGameTeamPosition.HOME,
+      'b'
+    )
   );
 
   function handleStartDate(newStartDate: string) {
@@ -38,17 +47,18 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
 
   return (
     <form action={saveGame}>
+      <Input hidden id={idField} name={idField} value={gameInput.id} />
       <Input
-        type="hidden"
+        hidden
         id={sportTypeField}
         name={sportTypeField}
-        value={sportType}
+        value={gameInput.sportType}
       />
       <Input
-        type="hidden"
+        hidden
         id="teamInstanceIds"
         name="teamInstanceIds"
-        value="a,b"
+        value={`${awayTeam.id},${homeTeam.id}`}
       />
       <Input
         className="col-span-full max-w-64 m-auto border-3"
@@ -64,7 +74,6 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         <div className="col-span-1 m-auto">
           <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
           <TeamInstanceCreator
-            id="a"
             teamInstance={awayTeam}
             setTeamInstance={setAwayTeam}
           />
@@ -72,7 +81,6 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         <div className="grid-cols-1 m-auto">
           <h2 className="mt-4 mb-4 text-4xl">Home Team</h2>
           <TeamInstanceCreator
-            id="b"
             teamInstance={homeTeam}
             setTeamInstance={setHomeTeam}
           />
@@ -81,6 +89,29 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
       <SubmitButton text="Submit" disabled={false} />
     </form>
   );
+}
+
+function getTeamByPositionOrNewTeamInstance(
+  gameInput: GameInput,
+  position: TwoTeamGameTeamPosition,
+  defaultId: string
+) {
+  const teamInstance = gameInput.teamInstances.find(
+    (teamInstance) => teamInstance.attributes.twoTeamGamePosition === position
+  );
+
+  if (teamInstance !== undefined) {
+    return teamInstance;
+  } else {
+    return new TeamInstanceInput(
+      defaultId,
+      undefined,
+      [],
+      undefined,
+      undefined,
+      { twoTeamGamePosition: position }
+    );
+  }
 }
 
 export default TwoTeamGameCreator;

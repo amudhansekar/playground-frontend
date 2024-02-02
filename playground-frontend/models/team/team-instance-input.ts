@@ -1,8 +1,10 @@
-import { keysToSnakeCase } from '@/common/api/object-util';
 import Player from '../player/player';
-import TeamInstanceApiRequestSaveDto from './team-instance-api-request-save-dto';
+import TeamInstanceAttributes from './team-attributes';
+import TeamInstance from './team-instance';
 
 class TeamInstanceInput {
+  id: string;
+
   name?: string;
 
   description?: string;
@@ -11,15 +13,17 @@ class TeamInstanceInput {
 
   teamId?: number;
 
-  attributes: object;
+  attributes: TeamInstanceAttributes;
 
   constructor(
+    id: string,
     name?: string,
     players: Player[] = [],
     description?: string,
     teamId?: number,
-    attributes: object = {}
+    attributes: TeamInstanceAttributes = {}
   ) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.players = players;
@@ -27,18 +31,15 @@ class TeamInstanceInput {
     this.attributes = attributes;
   }
 
-  convertToTeamInstanceApiRequestSaveDto(): TeamInstanceApiRequestSaveDto {
-    if (this.name === undefined) {
-      throw new Error('name must be defined');
-    }
-
-    return {
-      name: this.name,
-      description: this.description,
-      playerIds: this.players.map((player) => player.id),
-      teamId: this.teamId,
-      attributes: keysToSnakeCase(this.attributes),
-    };
+  static convertFromTeamInstance(teamInstance: TeamInstance) {
+    return new TeamInstanceInput(
+      teamInstance.id.toString(),
+      teamInstance.name,
+      teamInstance.players,
+      teamInstance.description,
+      teamInstance.teamId,
+      teamInstance.attributes
+    );
   }
 }
 

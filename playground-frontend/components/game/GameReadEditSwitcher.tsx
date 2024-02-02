@@ -2,9 +2,11 @@
 
 import Game from '@/models/game/base-game/game';
 import GameApiResponseFullDto from '@/models/game/base-game/game-api-response-full-dto';
+import GameInput from '@/models/game/base-game/game-input';
 import { Button } from '@nextui-org/react';
 import { useState } from 'react';
 import PlaygroundHeader from '../common/Header/PlaygroundHeader';
+import GameCreatorFactory from './GameCreatorFactory';
 import TwoTeamGameDetail from './TwoTeamGameDetail';
 
 interface Props {
@@ -13,9 +15,7 @@ interface Props {
 
 function GameReadEditSwitcher(props: Props) {
   const { game: gameApiResponse } = props;
-  const [game, setGame] = useState(
-    Game.convertFromGameApiResponsePublicDto(gameApiResponse)
-  );
+  const game = Game.convertFromGameApiResponsePublicDto(gameApiResponse);
   const [editing, setEditing] = useState(false);
 
   function toggleEditing() {
@@ -31,7 +31,11 @@ function GameReadEditSwitcher(props: Props) {
         />
       </div>
       <Button onPress={toggleEditing}>{editing ? 'Cancel' : 'Edit'}</Button>
-      <TwoTeamGameDetail game={game} />
+      {editing ? (
+        <GameCreatorFactory gameInput={GameInput.convertFromGame(game)} />
+      ) : (
+        <TwoTeamGameDetail game={game} />
+      )}
     </div>
   );
 }

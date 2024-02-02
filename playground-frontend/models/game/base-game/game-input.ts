@@ -1,8 +1,10 @@
 import SportType from '@/common/constants/sport-type';
-import GameApiRequestSaveDto from './game-api-request-save-dto';
 import TeamInstanceInput from '@/models/team/team-instance-input';
+import Game from './game';
 
 class GameInput {
+  id?: string;
+
   startDate?: Date;
 
   sportType: SportType;
@@ -11,26 +13,25 @@ class GameInput {
 
   constructor(
     sportType: SportType,
+    id?: string,
     startDate?: Date,
     teamInstances: TeamInstanceInput[] = []
   ) {
     this.startDate = startDate;
+    this.id = id;
     this.sportType = sportType;
     this.teamInstances = teamInstances;
   }
 
-  convertToGameApiRequestSaveDto(): GameApiRequestSaveDto {
-    if (this.startDate === undefined) {
-      throw new Error('start date must be defined');
-    }
-
-    return {
-      startDate: this.startDate.toISOString(),
-      sportType: this.sportType,
-      teamInstances: this.teamInstances.map((teamInstance) =>
-        teamInstance.convertToTeamInstanceApiRequestSaveDto()
-      ),
-    };
+  static convertFromGame(game: Game) {
+    return new GameInput(
+      game.sportType,
+      game.id.toString(),
+      game.startDate,
+      game.teamInstances.map((teamInstance) =>
+        TeamInstanceInput.convertFromTeamInstance(teamInstance)
+      )
+    );
   }
 }
 

@@ -1,4 +1,3 @@
-import PlayerApiRequestSaveDto from './player-api-request-save-dto';
 import PlayerApiResponseFullDto from './player-api-response-full-dto';
 
 class Player {
@@ -41,17 +40,6 @@ class Player {
       dto.height,
       dto.weight
     );
-  }
-
-  convertToPlayerApiRequestSaveDto(): PlayerApiRequestSaveDto {
-    return {
-      id: this.id,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      age: this.age,
-      height: this.height,
-      weight: this.weight,
-    };
   }
 }
 

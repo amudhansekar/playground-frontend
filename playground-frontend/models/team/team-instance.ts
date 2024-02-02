@@ -1,5 +1,5 @@
-import { keysToCamelCase, keysToSnakeCase } from '@/common/api/object-util';
 import Player from '../player/player';
+import TeamInstanceAttributes from './team-attributes';
 import TeamInstanceApiRequestSaveDto from './team-instance-api-request-save-dto';
 import TeamInstanceApiResponsePublicDto from './team-instance-api-response-full-dto';
 
@@ -14,7 +14,7 @@ class TeamInstance {
 
   teamId?: number;
 
-  attributes: object;
+  attributes: TeamInstanceAttributes;
 
   constructor(
     id: number,
@@ -22,7 +22,7 @@ class TeamInstance {
     players: Player[],
     description?: string,
     teamId?: number,
-    attributes: object = {}
+    attributes: TeamInstanceAttributes = {}
   ) {
     this.id = id;
     this.name = name;

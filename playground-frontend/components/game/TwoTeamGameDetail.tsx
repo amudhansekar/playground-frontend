@@ -1,4 +1,6 @@
+import { TwoTeamGameTeamPosition } from '@/common/constants/team-constants';
 import Game from '@/models/game/base-game/game';
+import TeamInstance from '@/models/team/team-instance';
 import TeamInstanceDetail from '../team/TeamInstanceDetail';
 
 interface Props {
@@ -8,9 +10,14 @@ interface Props {
 function TwoTeamGameDetail(props: Props) {
   const { game } = props;
 
-  const awayTeam = game.teamInstances[0];
-  const homeTeam = game.teamInstances[1];
-
+  const awayTeam = getTeamByPositionOrNewTeamInstance(
+    game.teamInstances,
+    TwoTeamGameTeamPosition.AWAY
+  );
+  const homeTeam = getTeamByPositionOrNewTeamInstance(
+    game.teamInstances,
+    TwoTeamGameTeamPosition.HOME
+  );
   return (
     <>
       <h1 className="col-span-full max-w-64 m-auto">{game.sportType}</h1>
@@ -21,14 +28,23 @@ function TwoTeamGameDetail(props: Props) {
       <div className="grid grid-cols-2">
         <div className="col-span-1 m-auto">
           <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
-          <TeamInstanceDetail teamInstance={awayTeam} />
+          <TeamInstanceDetail teamInstance={awayTeam!} />
         </div>
         <div className="grid-cols-1 m-auto">
           <h2 className="mt-4 mb-4 text-4xl">Home Team</h2>
-          <TeamInstanceDetail teamInstance={homeTeam} />
+          <TeamInstanceDetail teamInstance={homeTeam!} />
         </div>
       </div>
     </>
+  );
+}
+
+function getTeamByPositionOrNewTeamInstance(
+  teamInstances: TeamInstance[],
+  position: TwoTeamGameTeamPosition
+) {
+  return teamInstances.find(
+    (teamInstance) => teamInstance.attributes.twoTeamGamePosition === position
   );
 }
 

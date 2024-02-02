@@ -1,5 +1,5 @@
 interface TeamInstanceApiRequestSaveDto {
-  id?: number;
+  id?: number | null;
 
   name: string;
 

@@ -1,18 +1,18 @@
 import SportType from '@/common/constants/sport-type';
+import GameInput from '@/models/game/base-game/game-input';
 import TwoTeamGameCreator from './two-team-game/TwoTeamGameCreator';
-import { Session } from 'next-auth';
 
 interface Props {
-  sportType: SportType;
+  gameInput: GameInput;
 }
 
 function GameCreatorFactory(props: Props): JSX.Element {
-  const { sportType } = props;
+  const { gameInput } = props;
 
-  switch (sportType) {
+  switch (gameInput.sportType) {
     case SportType.BASKETBALL:
     case SportType.FOOTBALL:
-      return <TwoTeamGameCreator sportType={sportType} />;
+      return <TwoTeamGameCreator gameInput={gameInput} />;
     default:
       return <div />;
   }

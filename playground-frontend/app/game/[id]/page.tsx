@@ -1,5 +1,7 @@
 import { query } from '@/common/api/graphql-request';
 import { GameState } from '@/common/constants/game-constants';
+import GameReadEditSwitcher from '@/components/game/GameReadEditSwitcher';
+import GameApiResponseFullDto from '@/models/game/base-game/game-api-response-full-dto';
 import {
   endDateField,
   idField as gameIdField,
@@ -21,9 +23,6 @@ import {
   playersField,
   idField as teamInstanceIdField,
 } from '@/models/team/team-instance-fields';
-
-import GameReadEditSwitcher from '@/components/game/GameReadEditSwitcher';
-import GameApiResponseFullDto from '@/models/game/base-game/game-api-response-full-dto';
 
 interface Params {
   params: { id: number };

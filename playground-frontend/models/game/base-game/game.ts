@@ -1,8 +1,7 @@
+import { GameState } from '@/common/constants/game-constants';
+import SportType from '@/common/constants/sport-type';
 import TeamInstance from '@/models/team/team-instance';
 import GameApiResponseFullDto from './game-api-response-full-dto';
-import GameApiRequestSaveDto from './game-api-request-save-dto';
-import SportType from '@/common/constants/sport-type';
-import { GameState } from '@/common/constants/game-constants';
 
 class Game {
   id: number;
@@ -46,16 +45,6 @@ class Game {
       ),
       dto.end_date === undefined ? undefined : new Date(dto.end_date)
     );
-  }
-
-  convertToGameApiRequestSaveDto(): GameApiRequestSaveDto {
-    return {
-      startDate: this.startDate.toISOString(),
-      sportType: this.sportType,
-      teamInstances: this.teamInstances.map((teamInstance) =>
-        teamInstance.convertToTeamInstanceApiRequestSaveDto()
-      ),
-    };
   }
 }
 

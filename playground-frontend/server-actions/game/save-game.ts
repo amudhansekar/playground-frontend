@@ -14,6 +14,7 @@ import {
   descriptionField,
   nameField,
   playerIdsField,
+  idField as teamInstanceIdField,
 } from '@/models/team/team-instance-fields';
 import { EnumType } from 'json-to-graphql-query';
 import { revalidatePath } from 'next/cache';
@@ -25,7 +26,10 @@ async function saveGame(formData: FormData) {
     redirect('api/auth/signin');
   }
 
-  const gameId = formData.get('gameId');
+  const gameId =
+    formData.get(idField) === null
+      ? null
+      : parseInt(formData.get(idField) as string);
   const startDate = new Date(
     formData.get(startDateField) as string
   ).toISOString();
@@ -38,6 +42,7 @@ async function saveGame(formData: FormData) {
     saveGame: {
       __args: {
         input: {
+          [idField]: gameId,
           [sportTypeField]: new EnumType(sportType),
           [startDateField]: startDate,
           [teamInstancesField]: teamInstanceApiRequests,
@@ -65,15 +70,19 @@ function buildTeamInstance(
   const playerIds = (formData.get(`${playerIdsField}[${id}]`) as string)
     .split(',')
     .map((playerId) => parseInt(playerId));
+  const attributes = JSON.parse(
+    formData.get(`${attributesField}[${id}]`) as string
+  );
 
   const parsedId = parseInt(id);
-  const teamId = isNaN(parsedId) ? undefined : parsedId;
+  const teamId = isNaN(parsedId) ? null : parsedId;
 
   return {
+    [teamInstanceIdField]: teamId,
     [nameField]: name,
     [descriptionField]: description,
     [playerIdsField]: playerIds,
-    [attributesField]: {},
+    [attributesField]: attributes,
   };
 }
 

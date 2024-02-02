@@ -1,5 +1,6 @@
 import Player from '@/models/player/player';
 import {
+  attributesField,
   descriptionField,
   nameField,
   playerIdsField,
@@ -11,19 +12,20 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import PlayerCard from '../player/PlayerCard';
 
 interface Props {
-  id: string;
   teamInstance: TeamInstanceInput;
   setTeamInstance: Dispatch<SetStateAction<TeamInstanceInput>>;
 }
 
 function TeamInstanceCreator(props: Props): JSX.Element {
-  const { id, teamInstance, setTeamInstance } = props;
+  const { teamInstance, setTeamInstance } = props;
+  const id = teamInstance.id;
   let playerIds = teamInstance.players.map((player) => player.id).toString();
 
   function setName(name: string) {
     setTeamInstance(
       (teamInstance) =>
         new TeamInstanceInput(
+          teamInstance.id,
           name,
           teamInstance.players,
           teamInstance.description,
@@ -37,6 +39,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     setTeamInstance(
       (teamInstance) =>
         new TeamInstanceInput(
+          teamInstance.id,
           teamInstance.name,
           teamInstance.players,
           description,
@@ -74,6 +77,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     setTeamInstance(
       (teamInstance) =>
         new TeamInstanceInput(
+          teamInstance.id,
           teamInstance.name,
           newPlayerArray,
           teamInstance.description,
@@ -92,6 +96,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     setTeamInstance(
       (teamInstance) =>
         new TeamInstanceInput(
+          teamInstance.id,
           teamInstance.name,
           updatedPlayers,
           teamInstance.description,
@@ -126,6 +131,12 @@ function TeamInstanceCreator(props: Props): JSX.Element {
         id={`${playerIdsField}[${id}]`}
         name={`${playerIdsField}[${id}]`}
         value={playerIds}
+        hidden
+      />
+      <Input
+        id={`${attributesField}[${id}]`}
+        name={`${attributesField}[${id}]`}
+        value={JSON.stringify(teamInstance.attributes)}
         hidden
       />
       {teamInstance.players.map((player, index) => (
