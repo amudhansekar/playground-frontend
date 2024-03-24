@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@nextui-org/react": "^2.2.9",
-    "json-to-graphql-query": "^2.2.5",
-    "next-auth": "^4.24.5"
-  }
-}
