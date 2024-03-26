@@ -1,5 +1,6 @@
 import SportType from "@/common/constants/sport-type";
 import TeamInstanceInput from "@/team/model/team-instance-input";
+import Game from "./game";
 
 class GameInput {
   id?: string;
@@ -20,6 +21,17 @@ class GameInput {
     this.id = id;
     this.sportType = sportType;
     this.teamInstances = teamInstances;
+  }
+
+  static convertFromGame(game: Game) {
+    return new GameInput(
+      game.sportType,
+      game.id.toString(),
+      game.startDate,
+      game.teamInstances.map((teamInstance) =>
+        TeamInstanceInput.convertFromTeamInstance(teamInstance)
+      )
+    );
   }
 }
 

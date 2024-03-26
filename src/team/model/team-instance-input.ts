@@ -1,5 +1,6 @@
 import Player from "@/player/model/player";
 import TeamInstanceAttributes from "./team-attributes";
+import TeamInstance from "./team-instance";
 
 class TeamInstanceInput {
   id: string;
@@ -28,6 +29,17 @@ class TeamInstanceInput {
     this.players = players;
     this.teamId = teamId;
     this.attributes = attributes;
+  }
+
+  static convertFromTeamInstance(teamInstance: TeamInstance) {
+    return new TeamInstanceInput(
+      teamInstance.id.toString(),
+      teamInstance.name,
+      teamInstance.players,
+      teamInstance.description,
+      teamInstance.teamId,
+      teamInstance.attributes
+    );
   }
 }
 
