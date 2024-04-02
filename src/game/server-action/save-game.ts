@@ -52,7 +52,7 @@ async function saveGame(formData: FormData) {
   const response = await mutate(mutationRequest, {
     Authorization: `Bearer ${session.user.token_set.id_token}`,
   });
-  const redirectUrl = `game/${response.data.saveGame.id}`;
+  const redirectUrl = `/game/${response.data.saveGame.id}`;
   revalidatePath(redirectUrl);
   redirect(redirectUrl);
 }

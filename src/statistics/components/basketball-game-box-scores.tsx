@@ -37,13 +37,13 @@ import {
   playerField,
 } from "@/statistics/model/statistic-fields";
 import TeamInstance from "@/team/model/team-instance";
-import Game from "../model/game";
+import Game from "../../game/model/game";
 
 interface Props {
   game: Game;
 }
 
-async function BasketballStatisticTable(props: Props) {
+async function BasketballGameBoxScores(props: Props) {
   const { game } = props;
 
   const basketballBoxScoreQuery = {
@@ -134,4 +134,4 @@ function teamBlock(
   }
 }
 
-export default BasketballStatisticTable;
+export default BasketballGameBoxScores;

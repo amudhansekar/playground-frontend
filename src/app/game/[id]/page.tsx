@@ -1,7 +1,7 @@
 import { query } from "@/common/api/graphql-request";
 import { GameState } from "@/common/constants/game-constants";
 import GameReadEditSwitcher from "@/game/components/game-read-edit-switcher";
-import StatisticTableFactory from "@/game/components/statistic-table-factory";
+import GameStatisticTableFactory from "@/game/components/game-statistic-table-factory";
 import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import {
   endDateField,
@@ -78,7 +78,7 @@ function PendingGamePage(game: GameApiResponseFullDto) {
 }
 
 function LiveGamePage(game: GameApiResponseFullDto) {
-  return <StatisticTableFactory game={game} />;
+  return <GameStatisticTableFactory game={game} />;
 }
 
 function CompleteGamePage(game: GameApiResponseFullDto) {
