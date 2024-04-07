@@ -5,7 +5,7 @@ import TeamInstance, {
 } from "@/team/model/team-instance";
 import GameApiResponseFullDto from "./game-api-response-full-dto";
 
-class Game {
+interface Game {
   id: number;
 
   startDate: Date;
@@ -17,37 +17,22 @@ class Game {
   gameState: GameState;
 
   teamInstances: TeamInstance[];
+}
 
-  constructor(
-    id: number,
-    startDate: Date,
-    sportType: SportType,
-    gameState: GameState,
-    teamInstances: TeamInstance[] = [],
-    endDate?: Date
-  ) {
-    this.id = id;
-    this.startDate = startDate;
-    this.sportType = sportType;
-    this.gameState = gameState;
-    this.teamInstances = teamInstances;
-    this.endDate = endDate;
-  }
-
-  static convertFromGameApiResponsePublicDto(
-    dto: GameApiResponseFullDto
-  ): Game {
-    return new Game(
-      dto.id,
-      new Date(dto.startDate),
-      dto.sportType,
-      dto.gameState,
-      dto.teamInstances.map((teamInstance) =>
-        convertTeamInstanceApiResponseFullDtoToTeamInstance(teamInstance)
-      ),
-      dto.end_date === undefined ? undefined : new Date(dto.end_date)
-    );
-  }
+function convertGameApiResponseFullDtoToGame(
+  dto: GameApiResponseFullDto
+): Game {
+  return {
+    id: dto.id,
+    startDate: new Date(dto.startDate),
+    sportType: dto.sportType,
+    gameState: dto.gameState,
+    teamInstances: dto.teamInstances.map((teamInstance) =>
+      convertTeamInstanceApiResponseFullDtoToTeamInstance(teamInstance)
+    ),
+    endDate: dto.endDate === undefined ? undefined : new Date(dto.endDate),
+  };
 }
 
 export default Game;
+export { convertGameApiResponseFullDtoToGame };

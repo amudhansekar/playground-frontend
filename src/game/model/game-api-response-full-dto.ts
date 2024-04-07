@@ -13,7 +13,7 @@ interface GameApiResponseFullDto {
 
   teamInstances: TeamInstanceApiResponseFullDto[];
 
-  end_date?: string;
+  endDate?: string;
 }
 
 export default GameApiResponseFullDto;

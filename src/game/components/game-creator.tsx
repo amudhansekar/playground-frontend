@@ -3,7 +3,6 @@
 import SportType from "@/common/constants/sport-type";
 import { Selection } from "@nextui-org/react";
 import { useState } from "react";
-import GameInput from "../model/game-input";
 import GameCreatorFactory from "./game-creator-factory";
 import SportSelector from "./sport-selector";
 
@@ -26,9 +25,10 @@ function GameCreator(): JSX.Element {
       </div>
       {sport.size !== 0 && (
         <GameCreatorFactory
-          gameInput={
-            new GameInput(sport.values().next().value as unknown as SportType)
-          }
+          gameInput={{
+            sportType: sport.values().next().value as unknown as SportType,
+            teamInstances: [],
+          }}
         />
       )}
     </div>
