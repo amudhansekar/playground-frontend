@@ -1,4 +1,6 @@
-import Player from "@/player/model/player";
+import Player, {
+  convertPlayerApiResponseFullDtoToPlayer,
+} from "@/player/model/player";
 import PlayerGameId from "../player-game-id";
 import BasketballBoxScoreApiResponseFullDto from "./basketball-box-score-api-response-full-dto";
 
@@ -98,7 +100,7 @@ class BasketballBoxScore extends PlayerGameId {
     dto: BasketballBoxScoreApiResponseFullDto
   ): BasketballBoxScore {
     return new BasketballBoxScore(
-      Player.convertFromPlayerApiResponseFullDto(dto.player),
+      convertPlayerApiResponseFullDtoToPlayer(dto.player),
       dto.gameId,
       dto.defensiveRebounds,
       dto.offensiveRebounds,

@@ -1,4 +1,6 @@
-import Player from "@/player/model/player";
+import Player, {
+  convertPlayerApiResponseFullDtoToPlayer,
+} from "@/player/model/player";
 import TeamInstanceAttributes from "./team-attributes";
 import TeamInstanceApiResponseFullDto from "./team-instance-api-response-full-dto";
 
@@ -38,7 +40,7 @@ class TeamInstance {
       dto.id,
       dto.name,
       dto.players.map((playerDto) =>
-        Player.convertFromPlayerApiResponseFullDto(playerDto)
+        convertPlayerApiResponseFullDtoToPlayer(playerDto)
       ),
       dto.description,
       dto.teamId,

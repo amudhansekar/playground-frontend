@@ -1,6 +1,6 @@
 import PlayerApiResponseFullDto from "./player-api-response-full-dto";
 
-class Player {
+interface Player {
   id: number;
 
   firstName: string;
@@ -12,35 +12,20 @@ class Player {
   height?: number;
 
   weight?: number;
+}
 
-  constructor(
-    id: number,
-    firstName: string,
-    lastName: string,
-    age?: number,
-    height?: number,
-    weight?: number
-  ) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.age = age;
-    this.height = height;
-    this.weight = weight;
-  }
-
-  static convertFromPlayerApiResponseFullDto(
-    dto: PlayerApiResponseFullDto
-  ): Player {
-    return new Player(
-      dto.id,
-      dto.firstName,
-      dto.lastName,
-      dto.age,
-      dto.height,
-      dto.weight
-    );
-  }
+function convertPlayerApiResponseFullDtoToPlayer(
+  dto: PlayerApiResponseFullDto
+): Player {
+  return {
+    id: dto.id,
+    firstName: dto.firstName,
+    lastName: dto.lastName,
+    age: dto.age,
+    height: dto.height,
+    weight: dto.weight,
+  };
 }
 
 export default Player;
+export { convertPlayerApiResponseFullDtoToPlayer };

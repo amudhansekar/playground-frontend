@@ -1,5 +1,5 @@
 import PlayerNameCard from "@/player/components/player-name-card";
-import Player from "@/player/model/player";
+import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
 import { Button, Input } from "@nextui-org/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -68,7 +68,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     const playerId = parseInt(currentPlayerId);
     const response = await fetch(`/api/player/${playerId}`);
     const graphqlData = await response.json();
-    const player = Player.convertFromPlayerApiResponseFullDto(
+    const player = convertPlayerApiResponseFullDtoToPlayer(
       graphqlData.response.data.player
     );
 
