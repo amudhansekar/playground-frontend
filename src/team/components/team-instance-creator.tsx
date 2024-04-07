@@ -21,31 +21,21 @@ function TeamInstanceCreator(props: Props): JSX.Element {
   let playerIds = teamInstance.players.map((player) => player.id).toString();
 
   function setName(name: string) {
-    setTeamInstance(
-      (teamInstance) =>
-        new TeamInstanceInput(
-          teamInstance.id,
-          name,
-          teamInstance.players,
-          teamInstance.description,
-          teamInstance.teamId,
-          teamInstance.attributes
-        )
-    );
+    setTeamInstance((teamInstance) => {
+      return {
+        ...teamInstance,
+        name,
+      };
+    });
   }
 
   function setDescription(description: string) {
-    setTeamInstance(
-      (teamInstance) =>
-        new TeamInstanceInput(
-          teamInstance.id,
-          teamInstance.name,
-          teamInstance.players,
-          description,
-          teamInstance.teamId,
-          teamInstance.attributes
-        )
-    );
+    setTeamInstance((teamInstance) => {
+      return {
+        ...teamInstance,
+        description,
+      };
+    });
   }
 
   const [currentPlayerId, setCurrentPlayerId] = useState<string | undefined>();
@@ -73,17 +63,12 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     );
 
     const newPlayerArray = [...teamInstance.players, player];
-    setTeamInstance(
-      (teamInstance) =>
-        new TeamInstanceInput(
-          teamInstance.id,
-          teamInstance.name,
-          newPlayerArray,
-          teamInstance.description,
-          teamInstance.teamId,
-          teamInstance.attributes
-        )
-    );
+    setTeamInstance((teamInstance) => {
+      return {
+        ...teamInstance,
+        players: newPlayerArray,
+      };
+    });
 
     setCurrentPlayerId(undefined);
     playerIds = newPlayerArray.map((player) => player.id).toString();
@@ -92,17 +77,12 @@ function TeamInstanceCreator(props: Props): JSX.Element {
   function handleRemovePlayer(index: number) {
     const updatedPlayers = [...teamInstance.players];
     updatedPlayers.splice(index, 1);
-    setTeamInstance(
-      (teamInstance) =>
-        new TeamInstanceInput(
-          teamInstance.id,
-          teamInstance.name,
-          updatedPlayers,
-          teamInstance.description,
-          teamInstance.teamId,
-          teamInstance.attributes
-        )
-    );
+    setTeamInstance((teamInstance) => {
+      return {
+        ...teamInstance,
+        players: updatedPlayers,
+      };
+    });
 
     playerIds = updatedPlayers.map((player) => player.id).toString();
   }

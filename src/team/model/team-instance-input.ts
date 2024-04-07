@@ -2,7 +2,7 @@ import Player from "@/player/model/player";
 import TeamInstanceAttributes from "./team-attributes";
 import TeamInstance from "./team-instance";
 
-class TeamInstanceInput {
+interface TeamInstanceInput {
   id: string;
 
   name?: string;
@@ -14,33 +14,20 @@ class TeamInstanceInput {
   teamId?: number;
 
   attributes: TeamInstanceAttributes;
+}
 
-  constructor(
-    id: string,
-    name?: string,
-    players: Player[] = [],
-    description?: string,
-    teamId?: number,
-    attributes: TeamInstanceAttributes = {}
-  ) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.players = players;
-    this.teamId = teamId;
-    this.attributes = attributes;
-  }
-
-  static convertFromTeamInstance(teamInstance: TeamInstance) {
-    return new TeamInstanceInput(
-      teamInstance.id.toString(),
-      teamInstance.name,
-      teamInstance.players,
-      teamInstance.description,
-      teamInstance.teamId,
-      teamInstance.attributes
-    );
-  }
+function convertTeamInstanceToTeamInstanceInput(
+  teamInstance: TeamInstance
+): TeamInstanceInput {
+  return {
+    id: teamInstance.id.toString(),
+    name: teamInstance.name,
+    players: teamInstance.players,
+    description: teamInstance.description,
+    teamId: teamInstance.teamId,
+    attributes: teamInstance.attributes,
+  };
 }
 
 export default TeamInstanceInput;
+export { convertTeamInstanceToTeamInstanceInput };

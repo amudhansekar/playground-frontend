@@ -4,7 +4,7 @@ import Player, {
 import TeamInstanceAttributes from "./team-attributes";
 import TeamInstanceApiResponseFullDto from "./team-instance-api-response-full-dto";
 
-class TeamInstance {
+interface TeamInstance {
   id: number;
 
   name: string;
@@ -16,37 +16,22 @@ class TeamInstance {
   teamId?: number;
 
   attributes: TeamInstanceAttributes;
+}
 
-  constructor(
-    id: number,
-    name: string,
-    players: Player[],
-    description?: string,
-    teamId?: number,
-    attributes: TeamInstanceAttributes = {}
-  ) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.players = players;
-    this.teamId = teamId;
-    this.attributes = attributes;
-  }
-
-  static convertFromTeamInstanceApiResponsePublicDto(
-    dto: TeamInstanceApiResponseFullDto
-  ): TeamInstance {
-    return new TeamInstance(
-      dto.id,
-      dto.name,
-      dto.players.map((playerDto) =>
-        convertPlayerApiResponseFullDtoToPlayer(playerDto)
-      ),
-      dto.description,
-      dto.teamId,
-      dto.attributes
-    );
-  }
+function convertTeamInstanceApiResponseFullDtoToTeamInstance(
+  dto: TeamInstanceApiResponseFullDto
+): TeamInstance {
+  return {
+    id: dto.id,
+    name: dto.name,
+    players: dto.players.map((playerDto) =>
+      convertPlayerApiResponseFullDtoToPlayer(playerDto)
+    ),
+    description: dto.description,
+    teamId: dto.teamId,
+    attributes: dto.attributes,
+  };
 }
 
 export default TeamInstance;
+export { convertTeamInstanceApiResponseFullDtoToTeamInstance };

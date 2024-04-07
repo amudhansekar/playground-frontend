@@ -1,6 +1,8 @@
 import { GameState } from "@/common/constants/game-constants";
 import SportType from "@/common/constants/sport-type";
-import TeamInstance from "@/team/model/team-instance";
+import TeamInstance, {
+  convertTeamInstanceApiResponseFullDtoToTeamInstance,
+} from "@/team/model/team-instance";
 import GameApiResponseFullDto from "./game-api-response-full-dto";
 
 class Game {
@@ -41,7 +43,7 @@ class Game {
       dto.sportType,
       dto.gameState,
       dto.teamInstances.map((teamInstance) =>
-        TeamInstance.convertFromTeamInstanceApiResponsePublicDto(teamInstance)
+        convertTeamInstanceApiResponseFullDtoToTeamInstance(teamInstance)
       ),
       dto.end_date === undefined ? undefined : new Date(dto.end_date)
     );

@@ -89,7 +89,7 @@ function getTeamByPositionOrNewTeamInstance(
   gameInput: GameInput,
   position: TwoTeamGameTeamPosition,
   defaultId: string
-) {
+): TeamInstanceInput {
   const teamInstance = gameInput.teamInstances.find(
     (teamInstance) => teamInstance.attributes.twoTeamGamePosition === position
   );
@@ -97,14 +97,11 @@ function getTeamByPositionOrNewTeamInstance(
   if (teamInstance !== undefined) {
     return teamInstance;
   } else {
-    return new TeamInstanceInput(
-      defaultId,
-      undefined,
-      [],
-      undefined,
-      undefined,
-      { twoTeamGamePosition: position }
-    );
+    return {
+      id: defaultId,
+      players: [],
+      attributes: { twoTeamGamePosition: position },
+    };
   }
 }
 

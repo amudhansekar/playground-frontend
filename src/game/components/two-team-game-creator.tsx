@@ -2,11 +2,10 @@ import SubmitButton from "@/common/components/submit-button/submit-button";
 import { TwoTeamGameTeamPosition } from "@/common/constants/team-constants";
 import { dateToDatetimeLocalInput } from "@/common/util/date-util";
 import TeamInstanceCreator from "@/team/components/team-instance-creator";
-import TeamInstanceInput from "@/team/model/team-instance-input";
 import { Input } from "@nextui-org/react";
 import { useState } from "react";
 import { idField, sportTypeField, startDateField } from "../model/game-fields";
-import GameInput from "../model/game-model";
+import GameInput from "../model/game-input";
 import saveGame from "../server-action/save-game";
 
 interface Props {
@@ -97,14 +96,11 @@ function getTeamByPositionOrNewTeamInstance(
   if (teamInstance !== undefined) {
     return teamInstance;
   } else {
-    return new TeamInstanceInput(
-      defaultId,
-      undefined,
-      [],
-      undefined,
-      undefined,
-      { twoTeamGamePosition: position }
-    );
+    return {
+      id: defaultId,
+      players: [],
+      attributes: { twoTeamGamePosition: position },
+    };
   }
 }
 
