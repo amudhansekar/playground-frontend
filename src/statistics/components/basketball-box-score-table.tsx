@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import BasketballBoxScore from "../model/basketball/basketball-box-score";
+import { convertBasketballBoxScoreApiResponseDtoToBasketballBoxScore } from "../model/basketball/basketball-box-score";
 import BasketballBoxScoreApiResponseFullDto from "../model/basketball/basketball-box-score-api-response-full-dto";
 import PlayerLinkCellRenderer from "./player-link-cell-renderer";
 
@@ -17,7 +17,7 @@ interface Props {
 function BasketballBoxScoreTable(props: Props) {
   const { basketballBoxScoreDtos } = props;
   const basketballBoxScores = basketballBoxScoreDtos.map((dto) =>
-    BasketballBoxScore.convertFromBasketballBoxScoreApiResponseDto(dto)
+    convertBasketballBoxScoreApiResponseDtoToBasketballBoxScore(dto)
   );
 
   const { data: session, status } = useSession();
