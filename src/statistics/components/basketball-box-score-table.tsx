@@ -1,6 +1,6 @@
 "use client";
 
-import { ColDef } from "ag-grid-community";
+import { CellValueChangedEvent, ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
@@ -21,9 +21,9 @@ function BasketballBoxScoreTable(props: Props) {
   );
 
   const { data: session, status } = useSession();
-  // const authenticated = status === "authenticated";
+  const authenticated = status === "authenticated";
 
-  const authenticated = true;
+  const [changedRows, setChangedRows] = useState<any>([]);
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState<ColDef[]>([
     {
@@ -211,13 +211,22 @@ function BasketballBoxScoreTable(props: Props) {
   // Row Data: The data to be displayed.
   const [rowData, setRowData] = useState(basketballBoxScores);
 
+  function onCellValueChanged(event: CellValueChangedEvent) {
+    const data = event.data;
+    setChangedRows((oldArray: any) => [...oldArray, data]);
+  }
+
   // Container: Defines the grid's theme & dimensions.
   return (
     <div
       className={"ag-theme-quartz"}
       style={{ width: "1000px", height: "500px" }}
     >
-      <AgGridReact rowData={rowData} columnDefs={colDefs} />
+      <AgGridReact
+        rowData={rowData}
+        columnDefs={colDefs}
+        onCellValueChanged={onCellValueChanged}
+      />
     </div>
   );
 }

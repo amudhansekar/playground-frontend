@@ -6,7 +6,7 @@ interface Props {
   player: Player;
 }
 
-function PlayerCard(props: Props): JSX.Element {
+function PlayerNameCard(props: Props): JSX.Element {
   const { player } = props;
   return (
     <Card className="bg-slate-100	">
@@ -19,4 +19,4 @@ function PlayerCard(props: Props): JSX.Element {
   );
 }
 
-export default PlayerCard;
+export default PlayerNameCard;

@@ -20,4 +20,31 @@ interface Connection<T> {
   pageInfo: PageInfo;
 }
 
+const edgesField = "edges";
+
+const cursorField = "cursor";
+
+const nodeField = "node";
+
+const pageInfoField = "pageInfoField";
+
+const hasPreviousPageField = "hasPreviousPage";
+
+const hasNextPageField = "hasNextPage";
+
+const startCursor = "startCursor";
+
+const endCursor = "endCursor";
+
 export type { Connection, Edge, PageInfo };
+
+export {
+  cursorField,
+  edgesField,
+  endCursor,
+  hasNextPageField,
+  hasPreviousPageField,
+  nodeField,
+  pageInfoField,
+  startCursor,
+};

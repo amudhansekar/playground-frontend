@@ -1,4 +1,4 @@
-import PlayerCard from "@/player/components/player-card/player-card";
+import PlayerNameCard from "@/player/components/player-name-card";
 import Player from "@/player/model/player";
 import { Button, Input } from "@nextui-org/react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -140,7 +140,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       />
       {teamInstance.players.map((player, index) => (
         <div key={index}>
-          <PlayerCard player={player} />
+          <PlayerNameCard player={player} />
           <button type="button" onClick={() => handleRemovePlayer(index)}>
             Remove Player
           </button>
