@@ -2,19 +2,17 @@
 
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import { convertGameApiResponseFullDtoToGame } from "../model/game";
-import GameApiResponseFullDto from "../model/game-api-response-full-dto";
+import Game from "../model/game";
 import { convertGameToGameInput } from "../model/game-input";
 import GameCreatorFactory from "./game-creator-factory";
 import TwoTeamGameDetail from "./two-team-game-detail";
 
 interface Props {
-  game: GameApiResponseFullDto;
+  game: Game;
 }
 
 function GameReadEditSwitcher(props: Props) {
-  const { game: gameApiResponse } = props;
-  const game = convertGameApiResponseFullDtoToGame(gameApiResponse);
+  const { game } = props;
   const [editing, setEditing] = useState(false);
 
   function toggleEditing() {

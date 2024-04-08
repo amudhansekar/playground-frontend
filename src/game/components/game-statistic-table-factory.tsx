@@ -1,10 +1,9 @@
 import SportType from "@/common/constants/sport-type";
 import BasketballGameBoxScores from "@/statistics/components/basketball-game-box-scores";
-import { convertGameApiResponseFullDtoToGame } from "../model/game";
-import GameApiResponseFullDto from "../model/game-api-response-full-dto";
+import Game from "../model/game";
 
 interface Props {
-  game: GameApiResponseFullDto;
+  game: Game;
 }
 
 function GameStatisticTableFactory(props: Props) {
@@ -12,11 +11,7 @@ function GameStatisticTableFactory(props: Props) {
 
   switch (game.sportType) {
     case SportType.BASKETBALL:
-      return (
-        <BasketballGameBoxScores
-          game={convertGameApiResponseFullDtoToGame(game)}
-        />
-      );
+      return <BasketballGameBoxScores game={game} />;
     default:
       return null;
   }
