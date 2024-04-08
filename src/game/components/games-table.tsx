@@ -1,6 +1,6 @@
 "use client";
 
-import { Edge } from "@/common/api/relay";
+import { Connection } from "@/common/api/relay";
 import {
   Table,
   TableBody,
@@ -11,14 +11,15 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import { Key } from "react";
-import GameApiResponseFullDto from "../model/game-api-response-full-dto";
+import Game from "../model/game";
 
 interface Props {
-  games: Edge<GameApiResponseFullDto>[];
+  gameConnection: Connection<Game>;
 }
 
 function GamesTable(props: Props) {
-  const { games } = props;
+  const { gameConnection } = props;
+  const games = gameConnection.edges;
 
   const columns = [
     {
@@ -30,7 +31,7 @@ function GamesTable(props: Props) {
   const gamesToDisplay = games.map((game) => {
     return {
       key: game.node.id,
-      date: game.node.end_date ?? game.node.startDate,
+      date: game.node.endDate ?? game.node.startDate,
     };
   });
 

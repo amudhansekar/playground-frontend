@@ -1,7 +1,16 @@
 import { GraphQLResponse, query } from "@/common/api/graphql-request";
-import { edgesField, nodeField } from "@/common/api/relay";
+import {
+  Connection,
+  Edge,
+  convertEdges,
+  edgesField,
+  nodeField,
+} from "@/common/api/relay";
+import Game, { convertGameApiResponseFullDtoToGame } from "@/game/model/game";
+import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import { endDateField, startDateField } from "@/game/model/game-fields";
 import PlayerDetail from "@/player/components/player-detail";
+import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
 import {
   ageField,
   firstNameField,
@@ -60,15 +69,24 @@ async function PlayerPage({ params }: Params) {
   };
 
   const response: GraphQLResponse = await query(playerAndPreviousGamesQuery);
-  const player = response.data.player;
-  const previousGames = response.data.previousGames.edges;
-  const upcomingGames = response.data.upcomingGames.edges;
+  const player = convertPlayerApiResponseFullDtoToPlayer(response.data.player);
+  const previousGames: Connection<Game> = {
+    pageInfo: response.data.previousGames.pageInfo,
+    edges: convertGameApiEdgesToGameEdges(response.data.previousGames.edges),
+  };
+  const upcomingGames: Connection<Game> = {
+    pageInfo: response.data.upcomingGames.pageInfo,
+    edges: convertEdges(
+      response.data.upcomingGames.edges,
+      convertGameApiResponseFullDtoToGame
+    ),
+  };
   return (
     <>
       <PlayerDetail
         player={player}
-        previousGames={previousGames}
-        upcomingGames={upcomingGames}
+        previousGameConnection={previousGames}
+        upcomingGameConnection={upcomingGames}
       />
     </>
   );
@@ -120,6 +138,18 @@ function buildUpcomingGamesQuery(playerId: number) {
     filters: [playerFilter, gamesBeforeDateFilter],
     order: [queryOrder],
   };
+}
+
+function convertGameApiEdgesToGameEdges(
+  edges: Edge<GameApiResponseFullDto>[]
+): Edge<Game>[] {
+  return edges.map((edge) => {
+    const game = convertGameApiResponseFullDtoToGame(edge.node);
+    return {
+      cursor: edge.cursor,
+      node: game,
+    };
+  });
 }
 
 export default PlayerPage;

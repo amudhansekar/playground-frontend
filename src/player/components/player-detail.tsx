@@ -1,17 +1,17 @@
-import { Edge } from "@/common/api/relay";
+import { Connection } from "@/common/api/relay";
 import GamesTable from "@/game/components/games-table";
-import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
+import Game from "@/game/model/game";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import PlayerApiResponseFullDto from "../model/player-api-response-full-dto";
+import Player from "../model/player";
 
 interface Props {
-  player: PlayerApiResponseFullDto;
-  previousGames: Edge<GameApiResponseFullDto>[];
-  upcomingGames: Edge<GameApiResponseFullDto>[];
+  player: Player;
+  previousGameConnection: Connection<Game>;
+  upcomingGameConnection: Connection<Game>;
 }
 
 function PlayerDetail(props: Props) {
-  const { player, previousGames, upcomingGames } = props;
+  const { player, previousGameConnection, upcomingGameConnection } = props;
 
   return (
     <>
@@ -29,7 +29,7 @@ function PlayerDetail(props: Props) {
       </Card>
 
       <h1>Previous Games</h1>
-      <GamesTable games={previousGames} />
+      <GamesTable gameConnection={previousGameConnection} />
 
       <h2>Upcoming Games</h2>
       {/* <Table></Table> */}

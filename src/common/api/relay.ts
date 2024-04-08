@@ -16,8 +16,24 @@ interface Edge<T> {
  */
 
 interface Connection<T> {
-  edges: [Edge<T>];
+  edges: Edge<T>[];
   pageInfo: PageInfo;
+}
+
+interface ConvertingFunction<T> {
+  (input: any): T;
+}
+function convertEdges<T>(
+  edges: Edge<any>[],
+  convertingFunction: ConvertingFunction<T>
+): Edge<T>[] {
+  return edges.map((edge) => {
+    const convertedNode = convertingFunction(edge.node);
+    return {
+      cursor: edge.cursor,
+      node: convertedNode,
+    };
+  });
 }
 
 const edgesField = "edges";
@@ -32,19 +48,20 @@ const hasPreviousPageField = "hasPreviousPage";
 
 const hasNextPageField = "hasNextPage";
 
-const startCursor = "startCursor";
+const startCursorField = "startCursor";
 
-const endCursor = "endCursor";
+const endCursorField = "endCursor";
 
 export type { Connection, Edge, PageInfo };
 
 export {
+  convertEdges,
   cursorField,
   edgesField,
-  endCursor,
+  endCursorField,
   hasNextPageField,
   hasPreviousPageField,
   nodeField,
   pageInfoField,
-  startCursor,
+  startCursorField,
 };
