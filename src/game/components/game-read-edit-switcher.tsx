@@ -5,7 +5,9 @@ import { Button } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Game from "../model/game";
+import { idField } from "../model/game-fields";
 import { convertGameToGameInput } from "../model/game-input";
+import { startGame } from "../server-action/game-event-actions";
 import GameCreatorFactory from "./game-creator-factory";
 import GameDetailFactory from "./game-detail-factory";
 
@@ -13,7 +15,7 @@ interface Props {
   game: Game;
 }
 
-function GameReadEditSwitcher(props: Props) {
+function GameReadEditSwitcher(props: Props): JSX.Element {
   const { game } = props;
   const [editing, setEditing] = useState(false);
   const { data: session, status } = useSession();
@@ -22,21 +24,41 @@ function GameReadEditSwitcher(props: Props) {
     setEditing(!editing);
   }
 
-  const gameDisplay = editing ? (
-    <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
-  ) : (
-    <GameDetailFactory game={game} />
-  );
-
   return (
     <div className="flex flex-col items-center justify-between p-24">
       <h1 className="mb-3 text-2xl font-semibold">Game</h1>
-      {isAuthenticated(status) && (
-        <Button onPress={toggleEditing}>{editing ? "Cancel" : "Edit"}</Button>
-      )}
-      {gameDisplay}
+      {renderGameDisplay(game, isAuthenticated(status), editing, toggleEditing)}
     </div>
   );
+}
+
+function renderGameDisplay(
+  game: Game,
+  isAuthenticated: boolean,
+  editing: boolean,
+  toggleEditing: () => void
+): JSX.Element {
+  if (!isAuthenticated) {
+    return <GameDetailFactory game={game} />;
+  } else if (editing) {
+    return (
+      <>
+        <Button onPress={toggleEditing}>Cancel</Button>
+        <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <form action={startGame}>
+          <input hidden id={idField} name={idField} value={game.id} readOnly />
+          <Button type="submit">Start Game</Button>
+        </form>
+        <Button onPress={toggleEditing}>Edit</Button>
+        <GameDetailFactory game={game} />
+      </>
+    );
+  }
 }
 
 export default GameReadEditSwitcher;

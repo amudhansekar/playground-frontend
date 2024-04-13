@@ -1,3 +1,5 @@
+"use server";
+
 import { mutate } from "@/common/api/graphql-request";
 import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
 import TeamInstanceApiRequestSaveDto from "@/team/model/team-instance-api-request-save-dto";

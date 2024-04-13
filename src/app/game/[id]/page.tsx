@@ -8,11 +8,13 @@ import {
   endDateField,
   idField as gameIdField,
   gameStateField,
+  idField,
   livestreamsField,
   sportTypeField,
   startDateField,
   teamInstancesField,
 } from "@/game/model/game-fields";
+import { endGame } from "@/game/server-action/game-event-actions";
 import {
   firstNameField,
   lastNameField,
@@ -25,6 +27,7 @@ import {
   playersField,
   idField as teamInstanceIdField,
 } from "@/team/model/team-instance-fields";
+import { Button } from "@nextui-org/react";
 
 interface Params {
   params: { id: number };
@@ -80,7 +83,15 @@ function PendingGamePage(game: Game) {
 }
 
 function LiveGamePage(game: Game) {
-  return <GameStatisticTableFactory game={game} />;
+  return (
+    <>
+      <form action={endGame}>
+        <input hidden id={idField} name={idField} value={game.id} readOnly />
+        <Button type="submit">Start Game</Button>
+      </form>
+      <GameStatisticTableFactory game={game} />
+    </>
+  );
 }
 
 function CompleteGamePage(game: Game) {
