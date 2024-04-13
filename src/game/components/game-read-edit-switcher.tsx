@@ -7,7 +7,7 @@ import { useState } from "react";
 import Game from "../model/game";
 import { convertGameToGameInput } from "../model/game-input";
 import GameCreatorFactory from "./game-creator-factory";
-import TwoTeamGameDetail from "./two-team-game-detail";
+import GameDetailFactory from "./game-detail-factory";
 
 interface Props {
   game: Game;
@@ -25,14 +25,12 @@ function GameReadEditSwitcher(props: Props) {
   const gameDisplay = editing ? (
     <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
   ) : (
-    <TwoTeamGameDetail game={game} />
+    <GameDetailFactory game={game} />
   );
 
   return (
-    <div>
-      <div>
-        <h1 className={`mb-3 text-2xl font-semibold`}>Game</h1>
-      </div>
+    <div className="flex flex-col items-center justify-between p-24">
+      <h1 className="mb-3 text-2xl font-semibold">Game</h1>
       {isAuthenticated(status) && (
         <Button onPress={toggleEditing}>{editing ? "Cancel" : "Edit"}</Button>
       )}

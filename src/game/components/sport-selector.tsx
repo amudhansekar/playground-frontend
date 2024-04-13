@@ -12,17 +12,15 @@ function SportSelector(props: Props): JSX.Element {
   const sportTypes = renderSportTypes();
 
   return (
-    <div>
-      <Select
-        label="Select a sport"
-        selectedKeys={sportType}
-        onSelectionChange={setSportType}
-        className="max-w-xs"
-        isRequired
-      >
-        {sportTypes}
-      </Select>
-    </div>
+    <Select
+      label="Select a sport"
+      selectedKeys={sportType}
+      onSelectionChange={setSportType}
+      className="max-w-xs"
+      isRequired
+    >
+      {sportTypes}
+    </Select>
   );
 }
 

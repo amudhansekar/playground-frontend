@@ -17,7 +17,7 @@ import { Key, useCallback } from "react";
 
 interface Props {
   players: Player[];
-  deletePlayer: (playerId: number) => void;
+  deletePlayer?: (playerId: number) => void;
 }
 
 function initColumns(status: string): { key: Key; label: any }[] {
@@ -49,7 +49,11 @@ function TeamInstanceTable(props: Props) {
               alt="Delete Player"
               width={20}
               height={5}
-              onClick={() => deletePlayer(player.id)}
+              onClick={() => {
+                if (deletePlayer !== undefined) {
+                  deletePlayer(player.id);
+                }
+              }}
             />
           </div>
         );
