@@ -40,21 +40,20 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
 
   return (
     <form action={saveGame}>
-      <Input hidden id={idField} name={idField} value={gameInput.id} />
-      <Input
+      <input hidden id={idField} name={idField} value={gameInput.id} />
+      <input
         hidden
         id={sportTypeField}
         name={sportTypeField}
         value={gameInput.sportType}
       />
-      <Input
+      <input
         hidden
         id="teamInstanceIds"
         name="teamInstanceIds"
         value={`${awayTeam.id},${homeTeam.id}`}
       />
       <Input
-        className="col-span-full max-w-64 m-auto border-3"
         type="datetime-local"
         id={startDateField}
         name={startDateField}
@@ -63,22 +62,16 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         onValueChange={handleStartDate}
         isRequired
       />
-      <div className="grid grid-cols-2">
-        <div className="col-span-1 m-auto">
-          <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
-          <TeamInstanceCreator
-            teamInstance={awayTeam}
-            setTeamInstance={setAwayTeam}
-          />
-        </div>
-        <div className="grid-cols-1 m-auto">
-          <h2 className="mt-4 mb-4 text-4xl">Home Team</h2>
-          <TeamInstanceCreator
-            teamInstance={homeTeam}
-            setTeamInstance={setHomeTeam}
-          />
-        </div>
-      </div>
+      <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
+      <TeamInstanceCreator
+        teamInstance={awayTeam}
+        setTeamInstance={setAwayTeam}
+      />
+      <h2 className="mt-4 mb-4 text-4xl">Home Team</h2>
+      <TeamInstanceCreator
+        teamInstance={homeTeam}
+        setTeamInstance={setHomeTeam}
+      />
       <SubmitButton text="Submit" disabled={false} />
     </form>
   );

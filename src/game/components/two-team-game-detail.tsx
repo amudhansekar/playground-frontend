@@ -1,108 +1,42 @@
-import SubmitButton from "@/common/components/submit-button/submit-button";
 import { TwoTeamGameTeamPosition } from "@/common/constants/team-constants";
-import { dateToDatetimeLocalInput } from "@/common/util/date-util";
-import TeamInstanceCreator from "@/team/components/team-instance-creator";
-import TeamInstanceInput from "@/team/model/team-instance-input";
-import { Input } from "@nextui-org/react";
-import { useState } from "react";
-import { idField, sportTypeField, startDateField } from "../model/game-fields";
-import GameInput from "../model/game-input";
-import saveGame from "../server-action/save-game";
+import TeamInstanceTable from "@/team/components/team-instance-table";
+import TeamInstance from "@/team/model/team-instance";
+import Game from "../model/game";
 
 interface Props {
-  gameInput: GameInput;
+  game: Game;
 }
 
-function TwoTeamGameCreator(props: Props): JSX.Element {
-  const { gameInput } = props;
-  const [startDate, setStartDate] = useState(
-    gameInput.startDate === undefined
-      ? undefined
-      : dateToDatetimeLocalInput(gameInput.startDate)
-  );
-  const [awayTeam, setAwayTeam] = useState(
-    getTeamByPositionOrNewTeamInstance(
-      gameInput,
-      TwoTeamGameTeamPosition.AWAY,
-      "a"
-    )
-  );
-  const [homeTeam, setHomeTeam] = useState(
-    getTeamByPositionOrNewTeamInstance(
-      gameInput,
-      TwoTeamGameTeamPosition.HOME,
-      "b"
-    )
-  );
-
-  function handleStartDate(newStartDate: string) {
-    setStartDate(newStartDate);
-  }
+function TwoTeamGameDetail(props: Props): JSX.Element {
+  const { game } = props;
+  const awayTeam = getTeamByPosition(game, TwoTeamGameTeamPosition.AWAY);
+  const homeTeam = getTeamByPosition(game, TwoTeamGameTeamPosition.HOME);
 
   return (
-    <form action={saveGame}>
-      <Input hidden id={idField} name={idField} value={gameInput.id} />
-      <Input
-        hidden
-        id={sportTypeField}
-        name={sportTypeField}
-        value={gameInput.sportType}
-      />
-      <Input
-        hidden
-        id="teamInstanceIds"
-        name="teamInstanceIds"
-        value={`${awayTeam.id},${homeTeam.id}`}
-      />
-      <Input
-        className="col-span-full max-w-64 m-auto border-3"
-        type="datetime-local"
-        id={startDateField}
-        name={startDateField}
-        label="Start Date"
-        value={startDate}
-        onValueChange={handleStartDate}
-        isRequired
-      />
-      <div className="grid grid-cols-2">
-        <div className="col-span-1 m-auto">
-          <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
-          <TeamInstanceCreator
-            teamInstance={awayTeam}
-            setTeamInstance={setAwayTeam}
-          />
-        </div>
-        <div className="grid-cols-1 m-auto">
-          <h2 className="mt-4 mb-4 text-4xl">Home Team</h2>
-          <TeamInstanceCreator
-            teamInstance={homeTeam}
-            setTeamInstance={setHomeTeam}
-          />
-        </div>
-      </div>
-      <SubmitButton text="Submit" disabled={false} />
-    </form>
+    <>
+      <h2 className={`mb-3 text-2xl font-semibold`}>Away Team</h2>
+      <h3>{awayTeam !== undefined && awayTeam.name}</h3>
+      <p>{awayTeam !== undefined && awayTeam.description}</p>
+      {awayTeam !== undefined && (
+        <TeamInstanceTable players={awayTeam?.players} />
+      )}
+      <h2 className={`mb-3 text-2xl font-semibold`}>Home Team</h2>
+      <h3>{homeTeam !== undefined && homeTeam.name}</h3>
+      <p>{homeTeam !== undefined && homeTeam.description}</p>
+      {homeTeam !== undefined && (
+        <TeamInstanceTable players={homeTeam?.players} />
+      )}
+    </>
   );
 }
 
-function getTeamByPositionOrNewTeamInstance(
-  gameInput: GameInput,
-  position: TwoTeamGameTeamPosition,
-  defaultId: string
-): TeamInstanceInput {
-  const teamInstance = gameInput.teamInstances.find(
+function getTeamByPosition(
+  game: Game,
+  position: TwoTeamGameTeamPosition
+): TeamInstance | undefined {
+  return game.teamInstances.find(
     (teamInstance) => teamInstance.attributes.twoTeamGamePosition === position
   );
-
-  if (teamInstance !== undefined) {
-    return teamInstance;
-  } else {
-    return {
-      id: defaultId,
-      players: [],
-      attributes: { twoTeamGamePosition: position },
-    };
-  }
 }
 
-export default TwoTeamGameCreator;
+export default TwoTeamGameDetail;

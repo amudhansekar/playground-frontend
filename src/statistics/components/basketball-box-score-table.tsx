@@ -1,5 +1,6 @@
 "use client";
 
+import { isAuthenticated } from "@/common/auth/auth-util";
 import { CellValueChangedEvent, ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
@@ -21,7 +22,7 @@ function BasketballBoxScoreTable(props: Props) {
   );
 
   const { data: session, status } = useSession();
-  const authenticated = status === "authenticated";
+  const authenticated = isAuthenticated(status);
 
   const [changedRows, setChangedRows] = useState<any>([]);
   // Column Definitions: Defines & controls grid columns.

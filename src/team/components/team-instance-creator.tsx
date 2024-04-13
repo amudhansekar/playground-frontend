@@ -1,4 +1,3 @@
-import PlayerNameCard from "@/player/components/player-name-card";
 import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
 import { Button, Input } from "@nextui-org/react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -9,6 +8,7 @@ import {
   playerIdsField,
 } from "../model/team-instance-fields";
 import TeamInstanceInput from "../model/team-instance-input";
+import TeamInstanceTable from "./team-instance-table";
 
 interface Props {
   teamInstance: TeamInstanceInput;
@@ -74,17 +74,17 @@ function TeamInstanceCreator(props: Props): JSX.Element {
     playerIds = newPlayerArray.map((player) => player.id).toString();
   }
 
-  function handleRemovePlayer(index: number) {
-    const updatedPlayers = [...teamInstance.players];
-    updatedPlayers.splice(index, 1);
+  function handleDeletePlayer(playerId: number) {
     setTeamInstance((teamInstance) => {
+      const updatedPlayers = teamInstance.players.filter(
+        (player) => player.id !== playerId
+      );
+      playerIds = updatedPlayers.map((player) => player.id).toString();
       return {
         ...teamInstance,
         players: updatedPlayers,
       };
     });
-
-    playerIds = updatedPlayers.map((player) => player.id).toString();
   }
 
   return (
@@ -106,26 +106,18 @@ function TeamInstanceCreator(props: Props): JSX.Element {
         value={teamInstance.description || ""}
         onValueChange={setDescription}
       />
-      <Input
+      <input
         id={`${playerIdsField}[${id}]`}
         name={`${playerIdsField}[${id}]`}
         value={playerIds}
         hidden
       />
-      <Input
+      <input
         id={`${attributesField}[${id}]`}
         name={`${attributesField}[${id}]`}
         value={JSON.stringify(teamInstance.attributes)}
         hidden
       />
-      {teamInstance.players.map((player, index) => (
-        <div key={index}>
-          <PlayerNameCard player={player} />
-          <button type="button" onClick={() => handleRemovePlayer(index)}>
-            Remove Player
-          </button>
-        </div>
-      ))}
       <Input
         label="Add Player"
         placeholder="Enter the Player ID"
@@ -140,6 +132,10 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       >
         Add Player
       </Button>
+      <TeamInstanceTable
+        players={teamInstance.players}
+        deletePlayer={handleDeletePlayer}
+      />
     </div>
   );
 }

@@ -16,11 +16,11 @@ function GameCreator(): JSX.Element {
   }
 
   return (
-    <div className="grid grid-flow-row gap-y-10">
-      <div className="col-span-full m-auto">
+    <div>
+      <div>
         <h1>New Game</h1>
       </div>
-      <div className="col-span-full m-auto">
+      <div>
         <SportSelector sportType={sport} setSportType={handleSelectionChange} />
       </div>
       {sport.size !== 0 && (

@@ -1,6 +1,8 @@
 "use client";
 
+import { isAuthenticated } from "@/common/auth/auth-util";
 import { Button } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Game from "../model/game";
 import { convertGameToGameInput } from "../model/game-input";
@@ -14,22 +16,27 @@ interface Props {
 function GameReadEditSwitcher(props: Props) {
   const { game } = props;
   const [editing, setEditing] = useState(false);
+  const { data: session, status } = useSession();
 
   function toggleEditing() {
     setEditing(!editing);
   }
 
+  const gameDisplay = editing ? (
+    <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
+  ) : (
+    <TwoTeamGameDetail game={game} />
+  );
+
   return (
-    <div className="grid grid-flow-row gap-y-10">
-      <div className="col-span-full m-auto">
-        <h1>Game</h1>
+    <div>
+      <div>
+        <h1 className={`mb-3 text-2xl font-semibold`}>Game</h1>
       </div>
-      <Button onPress={toggleEditing}>{editing ? "Cancel" : "Edit"}</Button>
-      {editing ? (
-        <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
-      ) : (
-        <TwoTeamGameDetail gameInput={convertGameToGameInput(game)} />
+      {isAuthenticated(status) && (
+        <Button onPress={toggleEditing}>{editing ? "Cancel" : "Edit"}</Button>
       )}
+      {gameDisplay}
     </div>
   );
 }
