@@ -1,6 +1,7 @@
 "use client";
 
-import { Connection } from "@/common/api/relay";
+import { Connection, Edge } from "@/common/api/relay";
+import { GameState } from "@/common/constants/game-constants";
 import {
   Table,
   TableBody,
@@ -8,9 +9,9 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  getKeyValue,
 } from "@nextui-org/react";
-import { Key } from "react";
+import Link from "next/link";
+import { Key, useCallback } from "react";
 import Game from "../model/game";
 
 interface Props {
@@ -19,24 +20,45 @@ interface Props {
 
 function GamesTable(props: Props) {
   const { gameConnection } = props;
-  const games = gameConnection.edges;
+  const gameEdges = gameConnection.edges;
 
   const columns = [
     {
       key: "date",
       label: "Date Played",
     },
+    {
+      key: "score",
+      label: "Score",
+    },
   ];
 
-  const gamesToDisplay = games.map((game) => {
-    return {
-      key: game.node.id,
-      date: game.node.endDate ?? game.node.startDate,
-    };
-  });
+  const renderCell = useCallback((gameEdge: Edge<Game>, columnKey: Key) => {
+    const game = gameEdge.node;
+    switch (columnKey) {
+      case "date":
+        const dateObject = game.endDate ?? game.startDate;
+        return (
+          <Link href={`/game/${game.id}`}>{dateObject.toDateString()};</Link>
+        );
+      case "score":
+        if (GameState.PENDING === game.gameState) {
+          return;
+        }
+        const namesAndScores = game.teamInstances.map((teamInstance) => {
+          return (
+            teamInstance.name +
+            " " +
+            (teamInstance.score === null ? "" : teamInstance.score.score) +
+            " "
+          );
+        });
+        return <Link href={`/game/${game.id}`}>{namesAndScores};</Link>;
+    }
+  }, []);
 
   return (
-    <Table aria-label="Example static collection table">
+    <Table aria-label="Games">
       <TableHeader columns={columns}>
         {(column: { key: Key | null | undefined; label: any }) => (
           <TableColumn key={column.key} align="center">
@@ -44,11 +66,11 @@ function GamesTable(props: Props) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={gamesToDisplay} emptyContent={"No games"}>
-        {(item: { key: Key | null | undefined }) => (
-          <TableRow key={item.key}>
+      <TableBody items={gameEdges} emptyContent={"No games"}>
+        {(item: Edge<Game>) => (
+          <TableRow key={item.node.id}>
             {(columnKey: any) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
         )}

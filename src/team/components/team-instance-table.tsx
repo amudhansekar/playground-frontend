@@ -37,28 +37,31 @@ function TeamInstanceTable(props: Props) {
 
   const columns = initColumns(status);
 
-  const renderCell = useCallback((player: Player, columnKey: Key) => {
-    switch (columnKey) {
-      case "player":
-        return <PlayerNameCard player={player} />;
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <Image
-              src="/delete-icon.svg"
-              alt="Delete Player"
-              width={20}
-              height={5}
-              onClick={() => {
-                if (deletePlayer !== undefined) {
-                  deletePlayer(player.id);
-                }
-              }}
-            />
-          </div>
-        );
-    }
-  }, []);
+  const renderCell = useCallback(
+    (player: Player, columnKey: Key) => {
+      switch (columnKey) {
+        case "player":
+          return <PlayerNameCard player={player} />;
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-2">
+              <Image
+                src="/delete-icon.svg"
+                alt="Delete Player"
+                width={20}
+                height={5}
+                onClick={() => {
+                  if (deletePlayer !== undefined) {
+                    deletePlayer(player.id);
+                  }
+                }}
+              />
+            </div>
+          );
+      }
+    },
+    [deletePlayer]
+  );
 
   return (
     <Table>

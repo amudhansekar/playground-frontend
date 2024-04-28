@@ -4,21 +4,37 @@ import {
   Edge,
   convertEdges,
   edgesField,
+  endCursorField,
+  hasNextPageField,
+  hasPreviousPageField,
   nodeField,
+  pageInfoField,
+  startCursorField,
 } from "@/common/api/relay";
 import Game, { convertGameApiResponseFullDtoToGame } from "@/game/model/game";
 import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
-import { endDateField, startDateField } from "@/game/model/game-fields";
+import {
+  endDateField,
+  idField as gameIdField,
+  startDateField,
+  teamInstancesField,
+} from "@/game/model/game-fields";
 import PlayerDetail from "@/player/components/player-detail";
 import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
 import {
   ageField,
   firstNameField,
   heightField,
-  idField,
   lastNameField,
+  idField as playerIdField,
   weightField,
 } from "@/player/model/player-fields";
+import {
+  nameField,
+  playersField,
+  scoreField,
+  idField as teamInstanceIdField,
+} from "@/team/model/team-instance-fields";
 import { EnumType } from "json-to-graphql-query";
 
 interface Params {
@@ -33,7 +49,7 @@ async function PlayerPage({ params }: Params) {
       __args: {
         id: id,
       },
-      [idField]: true,
+      [playerIdField]: true,
       [firstNameField]: true,
       [lastNameField]: true,
       [ageField]: true,
@@ -46,10 +62,27 @@ async function PlayerPage({ params }: Params) {
       __args: {
         input: buildRecentGamesQuery(id),
       },
+      [pageInfoField]: {
+        [hasPreviousPageField]: true,
+        [hasNextPageField]: true,
+        [startCursorField]: true,
+        [endCursorField]: true,
+      },
       [edgesField]: {
         [nodeField]: {
-          [idField]: true,
+          [gameIdField]: true,
+          [startDateField]: true,
           [endDateField]: true,
+          [teamInstancesField]: {
+            [teamInstanceIdField]: true,
+            [nameField]: true,
+            [scoreField]: true,
+            [playersField]: {
+              [playerIdField]: true,
+              [firstNameField]: true,
+              [lastNameField]: true,
+            },
+          },
         },
       },
     },
@@ -59,10 +92,27 @@ async function PlayerPage({ params }: Params) {
       __args: {
         input: buildUpcomingGamesQuery(id),
       },
+      [pageInfoField]: {
+        [hasPreviousPageField]: true,
+        [hasNextPageField]: true,
+        [startCursorField]: true,
+        [endCursorField]: true,
+      },
       [edgesField]: {
         [nodeField]: {
-          [idField]: true,
+          [gameIdField]: true,
           [startDateField]: true,
+          [endDateField]: true,
+          [teamInstancesField]: {
+            [teamInstanceIdField]: true,
+            [nameField]: true,
+            [scoreField]: true,
+            [playersField]: {
+              [playerIdField]: true,
+              [firstNameField]: true,
+              [lastNameField]: true,
+            },
+          },
         },
       },
     },
@@ -72,7 +122,10 @@ async function PlayerPage({ params }: Params) {
   const player = convertPlayerApiResponseFullDtoToPlayer(response.data.player);
   const previousGames: Connection<Game> = {
     pageInfo: response.data.previousGames.pageInfo,
-    edges: convertGameApiEdgesToGameEdges(response.data.previousGames.edges),
+    edges: convertEdges(
+      response.data.previousGames.edges,
+      convertGameApiResponseFullDtoToGame
+    ),
   };
   const upcomingGames: Connection<Game> = {
     pageInfo: response.data.upcomingGames.pageInfo,

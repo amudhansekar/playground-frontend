@@ -42,7 +42,7 @@ const cursorField = "cursor";
 
 const nodeField = "node";
 
-const pageInfoField = "pageInfoField";
+const pageInfoField = "pageInfo";
 
 const hasPreviousPageField = "hasPreviousPage";
 

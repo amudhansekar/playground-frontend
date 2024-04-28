@@ -1,7 +1,7 @@
 import { Connection } from "@/common/api/relay";
 import GamesTable from "@/game/components/games-table";
 import Game from "@/game/model/game";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, User } from "@nextui-org/react";
 import Player from "../model/player";
 
 interface Props {
@@ -14,17 +14,22 @@ function PlayerDetail(props: Props) {
   const { player, previousGameConnection, upcomingGameConnection } = props;
 
   return (
-    <>
-      <Card>
-        <CardHeader>
-          <p>
-            {player.firstName} {player.lastName}
-          </p>
-          <p>Player ID: {player.id}</p>
+    <div className="flex flex-col items-center justify-between p-24">
+      <Card className="max-w-[340px]">
+        <CardHeader className="justify-between">
+          <User
+            name={`${player.firstName} ${player.lastName}`}
+            description={`Player ID: ${player.id}`}
+            avatarProps={{
+              isBordered: true,
+              showFallback: true,
+            }}
+          />
         </CardHeader>
         <CardBody>
           <p>Age: {player.age}</p>
           <p>Height: {player.height}</p>
+          <p>Weight: {player.weight}</p>
         </CardBody>
       </Card>
 
@@ -32,8 +37,8 @@ function PlayerDetail(props: Props) {
       <GamesTable gameConnection={previousGameConnection} />
 
       <h2>Upcoming Games</h2>
-      {/* <Table></Table> */}
-    </>
+      <GamesTable gameConnection={upcomingGameConnection} />
+    </div>
   );
 }
 

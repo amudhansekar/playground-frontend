@@ -16,6 +16,8 @@ interface TeamInstance {
   teamId?: number;
 
   attributes: TeamInstanceAttributes;
+
+  score?: any;
 }
 
 function convertTeamInstanceApiResponseFullDtoToTeamInstance(
@@ -30,6 +32,7 @@ function convertTeamInstanceApiResponseFullDtoToTeamInstance(
     description: dto.description,
     teamId: dto.teamId,
     attributes: dto.attributes,
+    score: dto.score,
   };
 }
 

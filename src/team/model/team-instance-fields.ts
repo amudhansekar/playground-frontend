@@ -13,6 +13,8 @@ const playerIdsField = "playerIds";
 // Fields for response
 const playersField = "players";
 
+const scoreField = "score";
+
 export {
   attributesField,
   descriptionField,
@@ -20,4 +22,5 @@ export {
   nameField,
   playerIdsField,
   playersField,
+  scoreField,
 };

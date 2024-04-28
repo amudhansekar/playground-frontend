@@ -12,6 +12,8 @@ interface TeamInstanceApiResponseFullDto {
   teamId?: number;
 
   attributes: any;
+
+  score?: any;
 }
 
 export default TeamInstanceApiResponseFullDto;
