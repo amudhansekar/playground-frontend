@@ -33,10 +33,10 @@ function PlayerDetail(props: Props) {
         </CardBody>
       </Card>
 
-      <h1>Previous Games</h1>
+      <h2 className="mb-3 text-2xl font-semibold my-5">Previous Games</h2>
       <GamesTable gameConnection={previousGameConnection} />
 
-      <h2>Upcoming Games</h2>
+      <h2 className="mb-3 text-2xl font-semibold my-5">Upcoming Games</h2>
       <GamesTable gameConnection={upcomingGameConnection} />
     </div>
   );

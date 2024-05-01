@@ -4,8 +4,8 @@ import { Button } from "@nextui-org/button";
 import { useFormStatus } from "react-dom";
 
 interface Props {
-  disabled: boolean | undefined;
-  text: string | undefined;
+  disabled?: boolean;
+  text?: string;
 }
 
 function SubmitButton(props: Props): JSX.Element {

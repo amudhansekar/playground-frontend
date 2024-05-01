@@ -39,7 +39,7 @@ function GamesTable(props: Props) {
       case "date":
         const dateObject = game.endDate ?? game.startDate;
         return (
-          <Link href={`/game/${game.id}`}>{dateObject.toDateString()};</Link>
+          <Link href={`/game/${game.id}`}>{dateObject.toDateString()}</Link>
         );
       case "score":
         if (GameState.PENDING === game.gameState) {
@@ -53,7 +53,7 @@ function GamesTable(props: Props) {
             " "
           );
         });
-        return <Link href={`/game/${game.id}`}>{namesAndScores};</Link>;
+        return <Link href={`/game/${game.id}`}>{namesAndScores}</Link>;
     }
   }, []);
 
