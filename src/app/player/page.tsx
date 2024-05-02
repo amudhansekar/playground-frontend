@@ -1,5 +1,5 @@
 import SubmitButton from "@/common/components/submit-button/submit-button";
-import { getCurrentPlayerServer } from "@/common/util/player-util";
+import { getCurrentPlayerServerWithRedirect } from "@/common/util/player-util";
 import {
   ageField,
   firstNameField,
@@ -12,7 +12,7 @@ import { Input } from "@nextui-org/react";
 import { redirect } from "next/navigation";
 
 async function NewPlayerPage() {
-  const player = await getCurrentPlayerServer();
+  const player = await getCurrentPlayerServerWithRedirect();
 
   if (player !== undefined) {
     redirect(`/player/${player.id}`);

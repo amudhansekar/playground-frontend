@@ -1,6 +1,4 @@
-import { Account, NextAuthOptions, Profile, Session, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-import { JWT } from "next-auth/jwt";
+import { Account, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
@@ -19,25 +17,14 @@ const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt(params: {
-      token: JWT;
-      user: User | AdapterUser;
-      account: Account | null;
-      profile?: Profile | undefined;
-      trigger?: "signIn" | "signUp" | "update" | undefined;
-      isNewUser?: boolean | undefined;
-      session?: any;
-    }) {
-      const { token, user, account, profile, trigger, isNewUser, session } =
-        params;
+    async jwt({ token, user, account, profile, trigger, session }) {
       if (account) {
         token.token_set = account;
       }
       return token;
     },
 
-    async session(params: { session: Session; token: JWT; user: AdapterUser }) {
-      const { session, token, user } = params;
+    async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.user.token_set = token.token_set as Account;
       return session;

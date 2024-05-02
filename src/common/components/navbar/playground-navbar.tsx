@@ -1,21 +1,10 @@
-import { Avatar } from "@nextui-org/avatar";
-import { Button } from "@nextui-org/button";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/navbar";
+import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
+import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import Link from "next/link";
+import UserNavbarSelection from "./user-navbar-selection";
 
-function PlaygroundNavbar(): JSX.Element {
-  const isLoggedIn = false;
+async function PlaygroundNavbar(): Promise<JSX.Element> {
+  const session = await getPlaygroundServerSession();
   return (
     <Navbar className="py-2 border-4">
       <NavbarBrand>
@@ -31,34 +20,7 @@ function PlaygroundNavbar(): JSX.Element {
         justify="center"
       ></NavbarContent>
       <NavbarContent justify="end">
-        {isLoggedIn ? (
-          <>
-            <NavbarItem className="hidden lg:flex">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Avatar name="Current User" />
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="profile">
-                    <Link href="/profile">Profile</Link>
-                  </DropdownItem>
-                  <DropdownItem key="signout">Sign Out</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </NavbarItem>
-          </>
-        ) : (
-          <>
-            <NavbarItem className="hidden lg:flex">
-              <Link href="/api/auth/signin">Login</Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Button color="primary" href="/api/auth/signin" variant="flat">
-                Sign Up
-              </Button>
-            </NavbarItem>
-          </>
-        )}
+        <UserNavbarSelection session={session} />
       </NavbarContent>
     </Navbar>
   );
