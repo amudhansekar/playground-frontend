@@ -2,6 +2,7 @@
 
 import { mutate } from "@/common/api/graphql-request";
 import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
+import { getIntFromFormData } from "@/common/util/form-util";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -19,16 +20,12 @@ async function savePlayer(formData: FormData) {
     redirect("api/auth/signin");
   }
 
-  const playerId =
-    formData.get(idField) === null
-      ? null
-      : parseInt(formData.get(idField) as string);
-
+  const playerId = getIntFromFormData(formData, idField);
   const firstName = formData.get(firstNameField);
   const lastName = formData.get(lastNameField);
-  const age = formData.get(ageField);
-  const height = formData.get(heightField);
-  const weight = formData.get(weightField);
+  const age = getIntFromFormData(formData, ageField);
+  const height = getIntFromFormData(formData, heightField);
+  const weight = getIntFromFormData(formData, weightField);
 
   const mutationRequest = {
     savePlayer: {

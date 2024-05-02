@@ -2,6 +2,7 @@
 
 import { mutate } from "@/common/api/graphql-request";
 import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
+import { getIntFromFormData } from "@/common/util/form-util";
 import TeamInstanceApiRequestSaveDto from "@/team/model/team-instance-api-request-save-dto";
 import {
   attributesField,
@@ -26,13 +27,8 @@ async function saveGame(formData: FormData) {
     redirect("api/auth/signin");
   }
 
-  const gameId =
-    formData.get(idField) === null
-      ? null
-      : parseInt(formData.get(idField) as string);
-  const startDate = new Date(
-    formData.get(startDateField) as string
-  ).toISOString();
+  const gameId = getIntFromFormData(formData, idField);
+  const startDate = new Date(formData.get(startDateField) as string);
   const sportType = formData.get(sportTypeField) as string;
   const teamInstanceApiRequests = (formData.get("teamInstanceIds") as string)
     .split(",")
@@ -44,7 +40,7 @@ async function saveGame(formData: FormData) {
         input: {
           [idField]: gameId,
           [sportTypeField]: new EnumType(sportType),
-          [startDateField]: startDate,
+          [startDateField]: startDate.toISOString(),
           [teamInstancesField]: teamInstanceApiRequests,
         },
       },

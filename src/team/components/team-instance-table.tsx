@@ -20,8 +20,11 @@ interface Props {
   deletePlayer?: (playerId: number) => void;
 }
 
-function initColumns(status: string): { key: Key; label: any }[] {
-  if (isAuthenticated(status)) {
+function initColumns(
+  status: string,
+  deletePlayer?: (playerId: number) => void
+): { key: Key; label: any }[] {
+  if (isAuthenticated(status) && deletePlayer) {
     return [
       { label: "Player", key: "player" },
       { label: "Actions", key: "actions" },
@@ -35,7 +38,7 @@ function TeamInstanceTable(props: Props) {
   const { players, deletePlayer } = props;
   const { data: session, status } = useSession();
 
-  const columns = initColumns(status);
+  const columns = initColumns(status, deletePlayer);
 
   const renderCell = useCallback(
     (player: Player, columnKey: Key) => {

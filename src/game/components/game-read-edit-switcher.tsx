@@ -1,7 +1,8 @@
 "use client";
 
 import { isAuthenticated } from "@/common/auth/auth-util";
-import { Button } from "@nextui-org/react";
+import { fromDate, getLocalTimeZone } from "@internationalized/date";
+import { Button, DateInput } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Game from "../model/game";
@@ -27,6 +28,11 @@ function GameReadEditSwitcher(props: Props): JSX.Element {
   return (
     <div className="flex flex-col items-center justify-between p-24">
       <h1 className="mb-3 text-2xl font-semibold">Game</h1>
+      <DateInput
+        label="Start date"
+        isReadOnly
+        defaultValue={fromDate(game.startDate, getLocalTimeZone())}
+      />
       {renderGameDisplay(game, isAuthenticated(status), editing, toggleEditing)}
     </div>
   );

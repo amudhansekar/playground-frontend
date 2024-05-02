@@ -1,8 +1,8 @@
 import SubmitButton from "@/common/components/submit-button/submit-button";
 import { TwoTeamGameTeamPosition } from "@/common/constants/team-constants";
-import { dateToDatetimeLocalInput } from "@/common/util/date-util";
 import TeamInstanceCreator from "@/team/components/team-instance-creator";
-import { Input } from "@nextui-org/react";
+import { fromDate, getLocalTimeZone } from "@internationalized/date";
+import { DatePicker } from "@nextui-org/react";
 import { useState } from "react";
 import { idField, sportTypeField, startDateField } from "../model/game-fields";
 import GameInput from "../model/game-input";
@@ -14,11 +14,6 @@ interface Props {
 
 function TwoTeamGameCreator(props: Props): JSX.Element {
   const { gameInput } = props;
-  const [startDate, setStartDate] = useState(
-    gameInput.startDate === undefined
-      ? undefined
-      : dateToDatetimeLocalInput(gameInput.startDate)
-  );
   const [awayTeam, setAwayTeam] = useState(
     getTeamByPositionOrNewTeamInstance(
       gameInput,
@@ -33,10 +28,6 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
       "b"
     )
   );
-
-  function handleStartDate(newStartDate: string) {
-    setStartDate(newStartDate);
-  }
 
   return (
     <form action={saveGame}>
@@ -53,14 +44,20 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         name="teamInstanceIds"
         value={`${awayTeam.id},${homeTeam.id}`}
       />
-      <Input
-        type="datetime-local"
+      <DatePicker
         id={startDateField}
         name={startDateField}
         label="Start Date"
-        value={startDate}
-        onValueChange={handleStartDate}
+        variant="bordered"
+        granularity="minute"
+        hideTimeZone
+        showMonthAndYearPickers
         isRequired
+        defaultValue={
+          gameInput.startDate == undefined
+            ? undefined
+            : fromDate(gameInput.startDate, getLocalTimeZone())
+        }
       />
       <div className="mb-32 grid text-center lg:max-w-24xl lg:w-full lg:mb-0 lg:grid-cols-2 lg:text-left">
         <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
@@ -78,7 +75,7 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
           />
         </div>
       </div>
-      <SubmitButton text="Submit" disabled={false} />
+      <SubmitButton text="Submit" />
     </form>
   );
 }
