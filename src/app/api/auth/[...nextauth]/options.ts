@@ -1,6 +1,8 @@
 import { Account, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+// refresh token roatation: https://authjs.dev/guides/refresh-token-rotation
+
 const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({

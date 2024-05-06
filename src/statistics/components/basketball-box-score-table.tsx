@@ -1,13 +1,16 @@
 "use client";
 
 import { isAuthenticated } from "@/common/auth/auth-util";
-import { CellValueChangedEvent, ColDef } from "ag-grid-community";
+import { Button } from "@nextui-org/react";
+import { CellValueChangedEvent } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import { convertBasketballBoxScoreApiResponseDtoToBasketballBoxScore } from "../model/basketball/basketball-box-score";
+import { useRef, useState } from "react";
+import BasketballBoxScore, {
+  convertBasketballBoxScoreApiResponseDtoToBasketballBoxScore,
+} from "../model/basketball/basketball-box-score";
 import BasketballBoxScoreApiResponseFullDto from "../model/basketball/basketball-box-score-api-response-full-dto";
 import PlayerLinkCellRenderer from "./player-link-cell-renderer";
 
@@ -24,9 +27,11 @@ function BasketballBoxScoreTable(props: Props) {
   const { data: session, status } = useSession();
   const authenticated = isAuthenticated(status);
 
-  const [changedRows, setChangedRows] = useState<any>([]);
+  const [changedRowIds, setChangedRowIds] = useState<Set<string | undefined>>(
+    new Set()
+  );
   // Column Definitions: Defines & controls grid columns.
-  const [colDefs, setColDefs] = useState<ColDef[]>([
+  const colDefs = [
     {
       headerName: "Player",
       field: "player",
@@ -199,8 +204,8 @@ function BasketballBoxScoreTable(props: Props) {
       },
     },
     {
-      field: "points",
-      headerName: "PTS",
+      field: "personalFouls",
+      headerName: "FO",
       cellDataType: "number",
       editable: authenticated,
       cellEditor: "agNumberCellEditor",
@@ -208,26 +213,74 @@ function BasketballBoxScoreTable(props: Props) {
         min: 0,
       },
     },
-  ]);
+    {
+      field: "points",
+      headerName: "PTS",
+      cellDataType: "number",
+    },
+  ];
   // Row Data: The data to be displayed.
   const [rowData, setRowData] = useState(basketballBoxScores);
+  const gridRef = useRef<AgGridReact<BasketballBoxScore>>(null);
 
   function onCellValueChanged(event: CellValueChangedEvent) {
-    const data = event.data;
-    setChangedRows((oldArray: any) => [...oldArray, data]);
+    setChangedRowIds((prev) => new Set(prev.add(event.node.id)));
+  }
+
+  async function saveStatistics() {
+    if (changedRowIds.size === 0) {
+      return;
+    }
+    const changedData: BasketballBoxScore[] = [];
+    changedRowIds.forEach((rowId) => {
+      const row = gridRef.current!.api.getRowNode(rowId!);
+      const data = row?.data;
+      if (data !== undefined) {
+        changedData.push(data);
+      }
+    });
+    const response = await fetch("/api/statistic/basketball/boxscore", {
+      method: "PUT",
+      body: JSON.stringify(changedData),
+    });
+    const graphqlResponse = await response.json();
+    const boxScores: BasketballBoxScoreApiResponseFullDto[] =
+      graphqlResponse.response.data.saveBasketballBoxScores;
+    boxScores.forEach((boxScore) => {
+      changedRowIds.forEach((rowId) => {
+        const row = gridRef.current!.api.getRowNode(rowId!);
+        if (row !== undefined) {
+          const data = row.data;
+          if (data !== undefined && data.player.id === boxScore.player.id) {
+            row.updateData(
+              convertBasketballBoxScoreApiResponseDtoToBasketballBoxScore(
+                boxScore
+              )
+            );
+          }
+        }
+      });
+    });
+    setChangedRowIds(new Set());
   }
 
   // Container: Defines the grid's theme & dimensions.
   return (
     <div
-      className={"ag-theme-quartz"}
-      style={{ width: "1000px", height: "500px" }}
+      className="ag-theme-quartz"
+      style={{ width: "90rem", height: "15rem" }}
     >
       <AgGridReact
+        ref={gridRef}
         rowData={rowData}
         columnDefs={colDefs}
         onCellValueChanged={onCellValueChanged}
       />
+      {authenticated && (
+        <Button disabled={changedRowIds.size === 0} onPress={saveStatistics}>
+          Save Changes
+        </Button>
+      )}
     </div>
   );
 }

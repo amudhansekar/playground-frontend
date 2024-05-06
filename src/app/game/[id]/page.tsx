@@ -84,18 +84,22 @@ function PendingGamePage(game: Game) {
 
 function LiveGamePage(game: Game) {
   return (
-    <>
+    <div className="flex flex-col items-center justify-between p-24">
       <form action={endGame}>
         <input hidden id={idField} name={idField} value={game.id} readOnly />
-        <Button type="submit">Start Game</Button>
+        <Button type="submit">End Game</Button>
       </form>
       <GameStatisticTableFactory game={game} />
-    </>
+    </div>
   );
 }
 
 function CompleteGamePage(game: Game) {
-  return <GameStatisticTableFactory game={game} />;
+  return (
+    <div className="flex flex-col items-center justify-between p-24">
+      <GameStatisticTableFactory game={game} />
+    </div>
+  );
 }
 
 export default GamePage;
