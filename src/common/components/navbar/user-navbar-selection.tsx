@@ -31,9 +31,7 @@ function UserNavbarSelection(props: Props) {
             <Link href={"/profile"}>Profile</Link>
           </DropdownItem>
           <DropdownItem key="signout">
-            <Button color="primary" variant="flat" onPress={() => signOut()}>
-              Sign Out
-            </Button>
+            <p onClick={() => signOut()}>Sign Out</p>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -42,7 +40,7 @@ function UserNavbarSelection(props: Props) {
     <NavbarItem className="hidden lg:flex">
       <Link href="/api/auth/signin">
         <Button color="primary" variant="flat">
-          Sign Up
+          Sign In
         </Button>
       </Link>
     </NavbarItem>

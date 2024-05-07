@@ -7,6 +7,7 @@ import {
   idField as playerIdField,
   weightField,
 } from "@/player/model/player-fields";
+import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { GraphQLResponse, query } from "../api/graphql-request";
 import getPlaygroundServerSession from "../auth/get-playground-server-session";
@@ -21,21 +22,7 @@ async function getCurrentPlayerServer() {
     return undefined;
   }
 
-  const currentPlayerQuery = {
-    currentPlayer: {
-      [playerIdField]: true,
-      [firstNameField]: true,
-      [lastNameField]: true,
-      [ageField]: true,
-      [heightField]: true,
-      [weightField]: true,
-    },
-  };
-
-  const response: GraphQLResponse = await query(currentPlayerQuery);
-  return response.data.player === undefined
-    ? undefined
-    : convertPlayerApiResponseFullDtoToPlayer(response.data.player);
+  return getCurrentPlayerFromServer(session);
 }
 
 /**
@@ -49,6 +36,10 @@ async function getCurrentPlayerServerWithRedirect() {
     redirect("api/auth/signin");
   }
 
+  return getCurrentPlayerFromServer(session);
+}
+
+async function getCurrentPlayerFromServer(session: Session) {
   const currentPlayerQuery = {
     currentPlayer: {
       [playerIdField]: true,
@@ -60,10 +51,12 @@ async function getCurrentPlayerServerWithRedirect() {
     },
   };
 
-  const response: GraphQLResponse = await query(currentPlayerQuery);
-  return response.data.player === undefined
+  const response: GraphQLResponse = await query(currentPlayerQuery, {
+    Authorization: `Bearer ${session.user.token_set.id_token}`,
+  });
+  return response.data.currentPlayer === undefined
     ? undefined
-    : convertPlayerApiResponseFullDtoToPlayer(response.data.player);
+    : convertPlayerApiResponseFullDtoToPlayer(response.data.currentPlayer);
 }
 
 export { getCurrentPlayerServer, getCurrentPlayerServerWithRedirect };

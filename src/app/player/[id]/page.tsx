@@ -16,6 +16,8 @@ import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import {
   endDateField,
   idField as gameIdField,
+  gameStateField,
+  sportTypeField,
   startDateField,
   teamInstancesField,
 } from "@/game/model/game-fields";
@@ -71,6 +73,8 @@ async function PlayerPage({ params }: Params) {
       [edgesField]: {
         [nodeField]: {
           [gameIdField]: true,
+          [gameStateField]: true,
+          [sportTypeField]: true,
           [startDateField]: true,
           [endDateField]: true,
           [teamInstancesField]: {
@@ -101,6 +105,8 @@ async function PlayerPage({ params }: Params) {
       [edgesField]: {
         [nodeField]: {
           [gameIdField]: true,
+          [gameStateField]: true,
+          [sportTypeField]: true,
           [startDateField]: true,
           [endDateField]: true,
           [teamInstancesField]: {
@@ -135,13 +141,11 @@ async function PlayerPage({ params }: Params) {
     ),
   };
   return (
-    <>
-      <PlayerDetail
-        player={player}
-        previousGameConnection={previousGames}
-        upcomingGameConnection={upcomingGames}
-      />
-    </>
+    <PlayerDetail
+      player={player}
+      previousGameConnection={previousGames}
+      upcomingGameConnection={upcomingGames}
+    />
   );
 }
 

@@ -24,6 +24,14 @@ function GamesTable(props: Props) {
 
   const columns = [
     {
+      key: "sportType",
+      label: "Sport Type",
+    },
+    {
+      key: "gameState",
+      label: "Status",
+    },
+    {
       key: "date",
       label: "Date Played",
     },
@@ -36,6 +44,10 @@ function GamesTable(props: Props) {
   const renderCell = useCallback((gameEdge: Edge<Game>, columnKey: Key) => {
     const game = gameEdge.node;
     switch (columnKey) {
+      case "sportType":
+        return game.sportType;
+      case "gameState":
+        return game.gameState;
       case "date":
         const dateObject = game.endDate ?? game.startDate;
         return (
