@@ -4,19 +4,15 @@ import {
   ageField,
   firstNameField,
   heightField,
+  idField,
   lastNameField,
   weightField,
 } from "@/player/model/player-fields";
 import savePlayer from "@/player/server-action/save-player";
 import { Input } from "@nextui-org/react";
-import { redirect } from "next/navigation";
 
 async function NewPlayerPage() {
   const player = await getCurrentPlayerServerWithRedirect();
-
-  if (player !== undefined) {
-    redirect(`/player/${player.id}`);
-  }
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -25,12 +21,14 @@ async function NewPlayerPage() {
       </h1>
       <h2>Tell us a little bit more about yourself</h2>
       <form action={savePlayer}>
+        <input hidden id={idField} name={idField} value={player?.id} readOnly />
         <Input
           id={firstNameField}
           name={firstNameField}
           isRequired
           label="First Name"
           className="my-5"
+          defaultValue={player?.firstName}
         />
         <Input
           id={lastNameField}
@@ -38,6 +36,7 @@ async function NewPlayerPage() {
           isRequired
           label="Last Name"
           className="my-5"
+          defaultValue={player?.lastName}
         />
         <Input
           id={ageField}
@@ -46,6 +45,9 @@ async function NewPlayerPage() {
           type="number"
           label="Age"
           className="my-5"
+          defaultValue={
+            player?.age === undefined ? undefined : player.age.toString()
+          }
         />
         <Input
           id={heightField}
@@ -53,6 +55,9 @@ async function NewPlayerPage() {
           type="number"
           label="Height (cm)"
           className="my-5"
+          defaultValue={
+            player?.height === undefined ? undefined : player.height.toString()
+          }
         />
         <Input
           id={weightField}
@@ -60,6 +65,9 @@ async function NewPlayerPage() {
           type="number"
           label="Weight (kg)"
           className="my-5"
+          defaultValue={
+            player?.weight === undefined ? undefined : player.weight.toString()
+          }
         />
         <SubmitButton />
       </form>

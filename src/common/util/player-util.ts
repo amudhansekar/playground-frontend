@@ -9,7 +9,7 @@ import {
 } from "@/player/model/player-fields";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
-import { GraphQLResponse, query } from "../api/graphql-request";
+import { ErrorType, GraphQLResponse, query } from "../api/graphql-request";
 import getPlaygroundServerSession from "../auth/get-playground-server-session";
 
 /**
@@ -54,9 +54,16 @@ async function getCurrentPlayerFromServer(session: Session) {
   const response: GraphQLResponse = await query(currentPlayerQuery, {
     Authorization: `Bearer ${session.user.token_set.id_token}`,
   });
-  return response.data.currentPlayer === undefined
-    ? undefined
-    : convertPlayerApiResponseFullDtoToPlayer(response.data.currentPlayer);
+
+  if (
+    response.errors.length > 0 &&
+    response.errors[0].extensions !== null &&
+    ErrorType.NOT_FOUND === response.errors[0].extensions.errorType
+  ) {
+    return undefined;
+  }
+
+  return convertPlayerApiResponseFullDtoToPlayer(response.data.currentPlayer);
 }
 
 export { getCurrentPlayerServer, getCurrentPlayerServerWithRedirect };

@@ -11,6 +11,7 @@ import {
   playerIdsField,
   idField as teamInstanceIdField,
 } from "@/team/model/team-instance-fields";
+import { parseZonedDateTime } from "@internationalized/date";
 import { EnumType } from "json-to-graphql-query";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -28,7 +29,7 @@ async function saveGame(formData: FormData) {
   }
 
   const gameId = getIntFromFormData(formData, idField);
-  const startDate = new Date(formData.get(startDateField) as string);
+  const startDate = parseZonedDateTime(formData.get(startDateField) as string);
   const sportType = formData.get(sportTypeField) as string;
   const teamInstanceApiRequests = (formData.get("teamInstanceIds") as string)
     .split(",")
@@ -40,7 +41,7 @@ async function saveGame(formData: FormData) {
         input: {
           [idField]: gameId,
           [sportTypeField]: new EnumType(sportType),
-          [startDateField]: startDate.toISOString(),
+          [startDateField]: startDate.toAbsoluteString(),
           [teamInstancesField]: teamInstanceApiRequests,
         },
       },

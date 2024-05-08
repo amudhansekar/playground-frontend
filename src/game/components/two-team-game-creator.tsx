@@ -1,7 +1,7 @@
 import SubmitButton from "@/common/components/submit-button/submit-button";
 import { TwoTeamGameTeamPosition } from "@/common/constants/team-constants";
 import TeamInstanceCreator from "@/team/components/team-instance-creator";
-import { fromDate, getLocalTimeZone } from "@internationalized/date";
+import { fromDate, getLocalTimeZone, now } from "@internationalized/date";
 import { DatePicker } from "@nextui-org/react";
 import { useState } from "react";
 import { idField, sportTypeField, startDateField } from "../model/game-fields";
@@ -55,7 +55,7 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         isRequired
         defaultValue={
           gameInput.startDate == undefined
-            ? undefined
+            ? now(getLocalTimeZone())
             : fromDate(gameInput.startDate, getLocalTimeZone())
         }
       />

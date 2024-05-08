@@ -28,11 +28,6 @@ function GameReadEditSwitcher(props: Props): JSX.Element {
   return (
     <div className="flex flex-col items-center justify-between p-24">
       <h1 className="mb-3 text-2xl font-semibold">Game</h1>
-      <DateInput
-        label="Start date"
-        isReadOnly
-        defaultValue={fromDate(game.startDate, getLocalTimeZone())}
-      />
       {renderGameDisplay(game, isAuthenticated(status), editing, toggleEditing)}
     </div>
   );
@@ -61,6 +56,11 @@ function renderGameDisplay(
           <Button type="submit">Start Game</Button>
         </form>
         <Button onPress={toggleEditing}>Edit</Button>
+        <DateInput
+          label="Start date"
+          isReadOnly
+          defaultValue={fromDate(game.startDate, getLocalTimeZone())}
+        />
         <GameDetailFactory game={game} />
       </>
     );
