@@ -2,7 +2,6 @@ import { query } from "@/common/api/graphql-request";
 import { GameState } from "@/common/constants/game-constants";
 import GameReadEditSwitcher from "@/game/components/game-read-edit-switcher";
 import GameStatisticTableFactory from "@/game/components/game-statistic-table-factory";
-import Game, { convertGameApiResponseFullDtoToGame } from "@/game/model/game";
 import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import {
   endDateField,
@@ -64,40 +63,49 @@ async function GamePage({ params }: Params): Promise<JSX.Element> {
 
   const gameData = await query(gameQuery);
   const gameApiResponseFullDto: GameApiResponseFullDto = gameData.data.game;
-  const game = convertGameApiResponseFullDtoToGame(gameApiResponseFullDto);
 
-  switch (game.gameState) {
+  switch (gameApiResponseFullDto.gameState) {
     case GameState.PENDING:
-      return PendingGamePage(game);
+      return PendingGamePage(gameApiResponseFullDto);
     case GameState.LIVE:
-      return LiveGamePage(game);
+      return LiveGamePage(gameApiResponseFullDto);
     case GameState.COMPLETE:
-      return CompleteGamePage(game);
-    default:
-      return PendingGamePage(game);
+      return CompleteGamePage(gameApiResponseFullDto);
   }
 }
 
-function PendingGamePage(game: Game) {
-  return <GameReadEditSwitcher game={game} />;
+function PendingGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
+  return (
+    <GameReadEditSwitcher gameApiResponseFullDto={gameApiResponseFullDto} />
+  );
 }
 
-function LiveGamePage(game: Game) {
+function LiveGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   return (
     <div className="flex flex-col items-center justify-between p-24">
       <form action={endGame}>
-        <input hidden id={idField} name={idField} value={game.id} readOnly />
+        <input
+          hidden
+          id={idField}
+          name={idField}
+          value={gameApiResponseFullDto.id}
+          readOnly
+        />
         <Button type="submit">End Game</Button>
       </form>
-      <GameStatisticTableFactory game={game} />
+      <GameStatisticTableFactory
+        gameApiResponseFullDto={gameApiResponseFullDto}
+      />
     </div>
   );
 }
 
-function CompleteGamePage(game: Game) {
+function CompleteGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   return (
     <div className="flex flex-col items-center justify-between p-24">
-      <GameStatisticTableFactory game={game} />
+      <GameStatisticTableFactory
+        gameApiResponseFullDto={gameApiResponseFullDto}
+      />
     </div>
   );
 }

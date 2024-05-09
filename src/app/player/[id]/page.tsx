@@ -1,8 +1,6 @@
 import { GraphQLResponse, query } from "@/common/api/graphql-request";
 import {
   Connection,
-  Edge,
-  convertEdges,
   edgesField,
   endCursorField,
   hasNextPageField,
@@ -11,7 +9,6 @@ import {
   pageInfoField,
   startCursorField,
 } from "@/common/api/relay";
-import Game, { convertGameApiResponseFullDtoToGame } from "@/game/model/game";
 import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import {
   endDateField,
@@ -22,7 +19,7 @@ import {
   teamInstancesField,
 } from "@/game/model/game-fields";
 import PlayerDetail from "@/player/components/player-detail";
-import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
+import PlayerApiResponseFullDto from "@/player/model/player-api-response-full-dto";
 import {
   ageField,
   firstNameField,
@@ -125,24 +122,15 @@ async function PlayerPage({ params }: Params) {
   };
 
   const response: GraphQLResponse = await query(playerAndPreviousGamesQuery);
-  const player = convertPlayerApiResponseFullDtoToPlayer(response.data.player);
-  const previousGames: Connection<Game> = {
-    pageInfo: response.data.previousGames.pageInfo,
-    edges: convertEdges(
-      response.data.previousGames.edges,
-      convertGameApiResponseFullDtoToGame
-    ),
-  };
-  const upcomingGames: Connection<Game> = {
-    pageInfo: response.data.upcomingGames.pageInfo,
-    edges: convertEdges(
-      response.data.upcomingGames.edges,
-      convertGameApiResponseFullDtoToGame
-    ),
-  };
+  const playerApiResponseFullDto: PlayerApiResponseFullDto =
+    response.data.player;
+  const previousGames: Connection<GameApiResponseFullDto> =
+    response.data.previousGames;
+  const upcomingGames: Connection<GameApiResponseFullDto> =
+    response.data.upcomingGames;
   return (
     <PlayerDetail
-      player={player}
+      playerApiResponseFullDto={playerApiResponseFullDto}
       previousGameConnection={previousGames}
       upcomingGameConnection={upcomingGames}
     />
@@ -156,10 +144,10 @@ function buildRecentGamesQuery(playerId: number) {
     value: [playerId],
   };
 
-  const gamesBeforeDateFilter = {
-    field: new EnumType("END_DATE"),
-    operator: new EnumType("LESS_THAN_OR_EQUALS"),
-    value: new Date().toISOString(),
+  const gameStateFilter = {
+    field: new EnumType("GAME_STATE"),
+    operator: new EnumType("EQUALS"),
+    value: "COMPLETE",
   };
 
   const queryOrder = {
@@ -168,7 +156,7 @@ function buildRecentGamesQuery(playerId: number) {
   };
 
   return {
-    filters: [playerFilter, gamesBeforeDateFilter],
+    filters: [playerFilter, gameStateFilter],
     order: [queryOrder],
   };
 }
@@ -180,33 +168,21 @@ function buildUpcomingGamesQuery(playerId: number) {
     value: [playerId],
   };
 
-  const gamesBeforeDateFilter = {
-    field: new EnumType("START_DATE"),
-    operator: new EnumType("GREATER_THAN_OR_EQUALS"),
-    value: new Date().toISOString(),
+  const gameStateFilter = {
+    field: new EnumType("GAME_STATE"),
+    operator: new EnumType("IN"),
+    value: ["PENDING", "LIVE"],
   };
 
   const queryOrder = {
-    field: new EnumType("END_DATE"),
+    field: new EnumType("START_DATE"),
     order: new EnumType("ASC"),
   };
 
   return {
-    filters: [playerFilter, gamesBeforeDateFilter],
+    filters: [playerFilter, gameStateFilter],
     order: [queryOrder],
   };
-}
-
-function convertGameApiEdgesToGameEdges(
-  edges: Edge<GameApiResponseFullDto>[]
-): Edge<Game>[] {
-  return edges.map((edge) => {
-    const game = convertGameApiResponseFullDtoToGame(edge.node);
-    return {
-      cursor: edge.cursor,
-      node: game,
-    };
-  });
 }
 
 export default PlayerPage;

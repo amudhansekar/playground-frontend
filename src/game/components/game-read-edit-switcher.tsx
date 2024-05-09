@@ -1,11 +1,11 @@
 "use client";
 
 import { isAuthenticated } from "@/common/auth/auth-util";
-import { fromDate, getLocalTimeZone } from "@internationalized/date";
 import { Button, DateInput } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Game from "../model/game";
+import Game, { convertGameApiResponseFullDtoToGame } from "../model/game";
+import GameApiResponseFullDto from "../model/game-api-response-full-dto";
 import { idField } from "../model/game-fields";
 import { convertGameToGameInput } from "../model/game-input";
 import { startGame } from "../server-action/game-event-actions";
@@ -13,11 +13,12 @@ import GameCreatorFactory from "./game-creator-factory";
 import GameDetailFactory from "./game-detail-factory";
 
 interface Props {
-  game: Game;
+  gameApiResponseFullDto: GameApiResponseFullDto;
 }
 
 function GameReadEditSwitcher(props: Props): JSX.Element {
-  const { game } = props;
+  const { gameApiResponseFullDto } = props;
+  const game = convertGameApiResponseFullDtoToGame(gameApiResponseFullDto);
   const [editing, setEditing] = useState(false);
   const { data: session, status } = useSession();
 
@@ -59,7 +60,7 @@ function renderGameDisplay(
         <DateInput
           label="Start date"
           isReadOnly
-          defaultValue={fromDate(game.startDate, getLocalTimeZone())}
+          defaultValue={game.startDate}
         />
         <GameDetailFactory game={game} />
       </>

@@ -2,12 +2,13 @@ import SportType from "@/common/constants/sport-type";
 import TeamInstanceInput, {
   convertTeamInstanceToTeamInstanceInput,
 } from "@/team/model/team-instance-input";
+import { ZonedDateTime } from "@internationalized/date";
 import Game from "./game";
 
 interface GameInput {
   id?: string;
 
-  startDate?: Date;
+  startDate?: ZonedDateTime;
 
   sportType: SportType;
 

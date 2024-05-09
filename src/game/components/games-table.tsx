@@ -1,6 +1,6 @@
 "use client";
 
-import { Connection, Edge } from "@/common/api/relay";
+import { Connection, Edge, convertEdges } from "@/common/api/relay";
 import { GameState } from "@/common/constants/game-constants";
 import {
   Table,
@@ -12,15 +12,19 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { Key, useCallback } from "react";
-import Game from "../model/game";
+import Game, { convertGameApiResponseFullDtoToGame } from "../model/game";
+import GameApiResponseFullDto from "../model/game-api-response-full-dto";
 
 interface Props {
-  gameConnection: Connection<Game>;
+  gameConnection: Connection<GameApiResponseFullDto>;
 }
 
 function GamesTable(props: Props) {
   const { gameConnection } = props;
-  const gameEdges = gameConnection.edges;
+  const gameEdges = convertEdges(
+    gameConnection.edges,
+    convertGameApiResponseFullDtoToGame
+  );
 
   const columns = [
     {
@@ -49,9 +53,9 @@ function GamesTable(props: Props) {
       case "gameState":
         return game.gameState;
       case "date":
-        const dateObject = game.endDate ?? game.startDate;
+        const zonedDateTime = game.endDate ?? game.startDate;
         return (
-          <Link href={`/game/${game.id}`}>{dateObject.toDateString()}</Link>
+          <Link href={`/game/${game.id}`}>{zonedDateTime.toString()}</Link>
         );
       case "score":
         if (GameState.PENDING === game.gameState) {

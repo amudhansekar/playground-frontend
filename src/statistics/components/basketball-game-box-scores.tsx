@@ -1,6 +1,7 @@
 import { GraphQLResponse, query } from "@/common/api/graphql-request";
 import { Edge } from "@/common/api/relay";
 import { TwoTeamGameTeamPosition } from "@/common/constants/team-constants";
+import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import {
   firstNameField,
   idField,
@@ -37,14 +38,17 @@ import {
   playerField,
 } from "@/statistics/model/statistic-fields";
 import TeamInstance from "@/team/model/team-instance";
-import Game from "../../game/model/game";
+import Game, {
+  convertGameApiResponseFullDtoToGame,
+} from "../../game/model/game";
 
 interface Props {
-  game: Game;
+  gameApiResponseFullDto: GameApiResponseFullDto;
 }
 
 async function BasketballGameBoxScores(props: Props) {
-  const { game } = props;
+  const { gameApiResponseFullDto } = props;
+  const game = convertGameApiResponseFullDtoToGame(gameApiResponseFullDto);
 
   const basketballBoxScoreQuery = {
     basketballBoxScores: {
@@ -125,7 +129,7 @@ function teamBlock(
 
     return (
       <div>
-        <h2>{teamInstance.name}</h2>
+        <h2 className="my-5">{teamInstance.name}</h2>
         <BasketballBoxScoreTable
           basketballBoxScoreDtos={basketballDataForTeam}
         />

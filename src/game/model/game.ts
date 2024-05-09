@@ -3,14 +3,15 @@ import SportType from "@/common/constants/sport-type";
 import TeamInstance, {
   convertTeamInstanceApiResponseFullDtoToTeamInstance,
 } from "@/team/model/team-instance";
+import { ZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 import GameApiResponseFullDto from "./game-api-response-full-dto";
 
 interface Game {
   id: number;
 
-  startDate: Date;
+  startDate: ZonedDateTime;
 
-  endDate?: Date;
+  endDate?: ZonedDateTime;
 
   sportType: SportType;
 
@@ -24,13 +25,13 @@ function convertGameApiResponseFullDtoToGame(
 ): Game {
   return {
     id: dto.id,
-    startDate: new Date(dto.startDate),
+    startDate: parseAbsoluteToLocal(dto.startDate),
     sportType: dto.sportType,
     gameState: dto.gameState,
     teamInstances: dto.teamInstances.map((teamInstance) =>
       convertTeamInstanceApiResponseFullDtoToTeamInstance(teamInstance)
     ),
-    endDate: dto.endDate === undefined ? undefined : new Date(dto.endDate),
+    endDate: !dto.endDate ? undefined : parseAbsoluteToLocal(dto.endDate),
   };
 }
 

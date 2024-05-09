@@ -1,17 +1,26 @@
 import { Connection } from "@/common/api/relay";
 import GamesTable from "@/game/components/games-table";
-import Game from "@/game/model/game";
+import GameApiResponseFullDto from "@/game/model/game-api-response-full-dto";
 import { Card, CardBody, CardHeader, User } from "@nextui-org/react";
-import Player from "../model/player";
+import { convertPlayerApiResponseFullDtoToPlayer } from "../model/player";
+import PlayerApiResponseFullDto from "../model/player-api-response-full-dto";
 
 interface Props {
-  player: Player;
-  previousGameConnection: Connection<Game>;
-  upcomingGameConnection: Connection<Game>;
+  playerApiResponseFullDto: PlayerApiResponseFullDto;
+  previousGameConnection: Connection<GameApiResponseFullDto>;
+  upcomingGameConnection: Connection<GameApiResponseFullDto>;
 }
 
 function PlayerDetail(props: Props) {
-  const { player, previousGameConnection, upcomingGameConnection } = props;
+  const {
+    playerApiResponseFullDto,
+    previousGameConnection,
+    upcomingGameConnection,
+  } = props;
+
+  const player = convertPlayerApiResponseFullDtoToPlayer(
+    playerApiResponseFullDto
+  );
 
   return (
     <div className="flex flex-col items-center justify-between p-24">
