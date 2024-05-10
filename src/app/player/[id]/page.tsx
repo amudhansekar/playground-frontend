@@ -121,7 +121,13 @@ async function PlayerPage({ params }: Params) {
     },
   };
 
-  const response: GraphQLResponse = await query(playerAndPreviousGamesQuery);
+  const response: GraphQLResponse = await query(
+    playerAndPreviousGamesQuery,
+    undefined,
+    {
+      cache: "no-store",
+    }
+  );
   const playerApiResponseFullDto: PlayerApiResponseFullDto =
     response.data.player;
   const previousGames: Connection<GameApiResponseFullDto> =

@@ -19,32 +19,52 @@ function buildRequestObject(
   });
 }
 
-async function fetchData(data: string, inputHeaders?: object): Promise<any> {
-  const response = await fetch(buildRequestObject(data, inputHeaders));
+async function fetchData(
+  data: string,
+  inputHeaders?: object,
+  options?: NextFetchOptions
+): Promise<any> {
+  let response;
+  if (options === undefined) {
+    response = await fetch(buildRequestObject(data, inputHeaders));
+  } else {
+    response = await fetch(buildRequestObject(data, inputHeaders), options);
+  }
 
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
 async function query(
   query: object,
-  headers?: object
+  headers?: object,
+  options?: NextFetchOptions
 ): Promise<GraphQLResponse> {
   const graphQLQuery = { query: query };
   const body = JSON.stringify({
     query: jsonToGraphQLQuery(graphQLQuery),
   });
-  return await fetchData(body, headers);
+  return await fetchData(body, headers, options);
 }
 
 async function mutate(
   mutation: object,
-  headers: object
+  headers: object,
+  options?: NextFetchOptions
 ): Promise<GraphQLResponse> {
   const graphQLQuery = { mutation: mutation };
   const body = JSON.stringify({
     query: jsonToGraphQLQuery(graphQLQuery),
   });
-  return await fetchData(body, headers);
+  return await fetchData(body, headers, options);
+}
+
+/** See https://nextjs.org/docs/app/api-reference/functions/fetch */
+interface NextFetchOptions {
+  cache?: "force-cache" | "no-store";
+  next?: {
+    revalidate?: false | 0 | number;
+    tags?: [string];
+  };
 }
 
 interface GraphQLResponse {
@@ -117,4 +137,4 @@ interface TypedError {
 }
 
 export { ErrorType, mutate, query };
-export type { GraphQLError, GraphQLResponse, TypedError };
+export type { GraphQLError, GraphQLResponse, NextFetchOptions, TypedError };
