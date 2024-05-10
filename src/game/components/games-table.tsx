@@ -54,9 +54,7 @@ function GamesTable(props: Props) {
         return game.gameState;
       case "date":
         const zonedDateTime = game.endDate ?? game.startDate;
-        return (
-          <Link href={`/game/${game.id}`}>{zonedDateTime.toString()}</Link>
-        );
+        return <p>{zonedDateTime.toString()}</p>;
       case "score":
         if (GameState.PENDING === game.gameState) {
           return;
@@ -65,11 +63,13 @@ function GamesTable(props: Props) {
           return (
             teamInstance.name +
             " " +
-            (teamInstance.score === null ? "" : teamInstance.score.score) +
+            (teamInstance.score === null || teamInstance.score.score === null
+              ? ""
+              : teamInstance.score.score) +
             " "
           );
         });
-        return <Link href={`/game/${game.id}`}>{namesAndScores}</Link>;
+        return <p>{namesAndScores}</p>;
     }
   }, []);
 
@@ -86,7 +86,11 @@ function GamesTable(props: Props) {
         {(item: Edge<Game>) => (
           <TableRow key={item.node.id}>
             {(columnKey: any) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>
+                <Link href={`/game/${item.node.id}`}>
+                  {renderCell(item, columnKey)}
+                </Link>
+              </TableCell>
             )}
           </TableRow>
         )}

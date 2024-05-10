@@ -20,12 +20,12 @@ interface Connection<T> {
   pageInfo: PageInfo;
 }
 
-interface ConvertingFunction<T> {
-  (input: any): T;
+interface ConvertingFunction<T, U> {
+  (input: U): T;
 }
-function convertEdges<T>(
-  edges: Edge<any>[],
-  convertingFunction: ConvertingFunction<T>
+function convertEdges<T, U>(
+  edges: Edge<U>[],
+  convertingFunction: ConvertingFunction<T, U>
 ): Edge<T>[] {
   return edges.map((edge) => {
     const convertedNode = convertingFunction(edge.node);
