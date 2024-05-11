@@ -56,6 +56,7 @@ async function getCurrentPlayerFromServer(session: Session) {
   });
 
   if (
+    response.errors !== undefined &&
     response.errors.length > 0 &&
     response.errors[0].extensions !== null &&
     ErrorType.NOT_FOUND === response.errors[0].extensions.errorType

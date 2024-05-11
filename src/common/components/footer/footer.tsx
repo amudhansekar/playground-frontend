@@ -31,20 +31,12 @@ function Footer(): JSX.Element {
             </ul>
           </div>
           <div className="text-center">
-            <h5 className="font-semibold text-lg mb-4">Company</h5>
+            <h5 className="font-semibold text-lg mb-4">Supported Sports</h5>
             <ul className="space-y-2">
               <li>
                 <Link href="https://vercel.com/contact/sales?utm_source=next-site&utm_medium=footer&utm_campaign=next-website">
-                  About
+                  Basketball
                 </Link>
-              </li>
-              <li>
-                <Link href="https://vercel.com/contact/sales?utm_source=next-site&utm_medium=footer&utm_campaign=next-website">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy">Privacy Policy</Link>
               </li>
             </ul>
           </div>
@@ -56,6 +48,12 @@ function Footer(): JSX.Element {
               </li>
               <li>
                 <Link href="/contact">Contact</Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link href="/frequently-asked-questions">FAQ</Link>
               </li>
             </ul>
           </div>
