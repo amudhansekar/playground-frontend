@@ -67,4 +67,8 @@ async function getCurrentPlayerFromServer(session: Session) {
   return convertPlayerApiResponseFullDtoToPlayer(response.data.currentPlayer);
 }
 
-export { getCurrentPlayerServer, getCurrentPlayerServerWithRedirect };
+export {
+  getCurrentPlayerFromServer,
+  getCurrentPlayerServer,
+  getCurrentPlayerServerWithRedirect,
+};

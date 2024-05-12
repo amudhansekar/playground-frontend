@@ -4,7 +4,7 @@ function Footer(): JSX.Element {
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-4 gap-8">
           <div className="text-center">
             <h5 className="font-semibold text-lg mb-4">Getting Started</h5>
             <ul className="space-y-2">

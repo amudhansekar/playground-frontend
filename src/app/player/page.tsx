@@ -15,10 +15,8 @@ async function NewPlayerPage() {
   const player = await getCurrentPlayerServerWithRedirect();
 
   return (
-    <div className="flex flex-col items-center justify-between">
-      <h1 className="mb-3 text-2xl font-semibold my-5">
-        Welcome to Playground
-      </h1>
+    <div className="flex flex-col items-center justify-between m-24">
+      <h1 className="mb-3 text-2xl font-semibold">Welcome to Playground</h1>
       <h2>Tell us a little bit more about yourself</h2>
       <form action={savePlayer}>
         <input hidden id={idField} name={idField} value={player?.id} readOnly />

@@ -38,6 +38,7 @@ import {
   playerField,
 } from "@/statistics/model/statistic-fields";
 import TeamInstance from "@/team/model/team-instance";
+import { Divider } from "@nextui-org/react";
 import Game, {
   convertGameApiResponseFullDtoToGame,
 } from "../../game/model/game";
@@ -99,6 +100,7 @@ async function BasketballGameBoxScores(props: Props) {
   return (
     <div>
       {teamBlock(awayTeam, basketballBoxScoreData)}
+      <Divider className="my-5" />
       {teamBlock(homeTeam, basketballBoxScoreData)}
     </div>
   );
@@ -129,7 +131,8 @@ function teamBlock(
 
     return (
       <div>
-        <h2 className="my-5">{teamInstance.name}</h2>
+        <h2 className="mb-3 text-2xl font-semibold">{teamInstance.name}</h2>
+        <p>{teamInstance.description}</p>
         <BasketballBoxScoreTable
           basketballBoxScoreDtos={basketballDataForTeam}
         />

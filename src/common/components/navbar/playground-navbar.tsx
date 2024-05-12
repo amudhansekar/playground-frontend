@@ -14,7 +14,7 @@ async function PlaygroundNavbar(): Promise<JSX.Element> {
             src="/playground-logo.svg"
             width="30"
             height="30"
-            alt="Picture of the author"
+            alt="Playground Logo"
           />
         </Link>
         <Link href="/" color="foreground">

@@ -1,4 +1,6 @@
 import { query } from "@/common/api/graphql-request";
+import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
+import SubmitButton from "@/common/components/submit-button/submit-button";
 import { GameState } from "@/common/constants/game-constants";
 import GameReadEditSwitcher from "@/game/components/game-read-edit-switcher";
 import GameStatisticTableFactory from "@/game/components/game-statistic-table-factory";
@@ -26,7 +28,7 @@ import {
   playersField,
   idField as teamInstanceIdField,
 } from "@/team/model/team-instance-fields";
-import { Button } from "@nextui-org/react";
+import { Session } from "next-auth";
 
 interface Params {
   params: { id: number };
@@ -34,6 +36,9 @@ interface Params {
 
 async function GamePage({ params }: Params): Promise<JSX.Element> {
   const { id } = params;
+
+  const session = await getPlaygroundServerSession();
+
   const gameQuery = {
     game: {
       __args: {
@@ -68,7 +73,7 @@ async function GamePage({ params }: Params): Promise<JSX.Element> {
     case GameState.PENDING:
       return PendingGamePage(gameApiResponseFullDto);
     case GameState.LIVE:
-      return LiveGamePage(gameApiResponseFullDto);
+      return LiveGamePage(gameApiResponseFullDto, session);
     case GameState.COMPLETE:
       return CompleteGamePage(gameApiResponseFullDto);
   }
@@ -80,19 +85,24 @@ function PendingGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   );
 }
 
-function LiveGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
+function LiveGamePage(
+  gameApiResponseFullDto: GameApiResponseFullDto,
+  session: Session | null
+) {
   return (
-    <div className="flex flex-col items-center justify-between p-24">
-      <form action={endGame}>
-        <input
-          hidden
-          id={idField}
-          name={idField}
-          value={gameApiResponseFullDto.id}
-          readOnly
-        />
-        <Button type="submit">End Game</Button>
-      </form>
+    <div className="flex flex-col items-center justify-between m-24">
+      {session && (
+        <form action={endGame}>
+          <input
+            hidden
+            id={idField}
+            name={idField}
+            value={gameApiResponseFullDto.id}
+            readOnly
+          />
+          <SubmitButton text="End Game" />
+        </form>
+      )}
       <GameStatisticTableFactory
         gameApiResponseFullDto={gameApiResponseFullDto}
       />
@@ -102,7 +112,7 @@ function LiveGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
 
 function CompleteGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   return (
-    <div className="flex flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center justify-between m-24">
       <GameStatisticTableFactory
         gameApiResponseFullDto={gameApiResponseFullDto}
       />

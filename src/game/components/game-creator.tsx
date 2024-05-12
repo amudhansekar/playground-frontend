@@ -16,7 +16,7 @@ function GameCreator(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center justify-between m-24">
       <h1 className="mb-3 text-2xl font-semibold">New Game</h1>
       <SportSelector sportType={sport} setSportType={handleSelectionChange} />
       {sport.size !== 0 && (

@@ -43,7 +43,7 @@ interface Params {
 async function PlayerPage({ params }: Params) {
   const { id } = params;
 
-  const playerAndPreviousGamesQuery = {
+  const playerAndGamesQuery = {
     player: {
       __args: {
         id: id,
@@ -122,7 +122,7 @@ async function PlayerPage({ params }: Params) {
   };
 
   const response: GraphQLResponse = await query(
-    playerAndPreviousGamesQuery,
+    playerAndGamesQuery,
     undefined,
     {
       cache: "no-store",
@@ -157,7 +157,7 @@ function buildRecentGamesQuery(playerId: number) {
   };
 
   const queryOrder = {
-    field: new EnumType("END_DATE"),
+    field: new EnumType("START_DATE"),
     order: new EnumType("DESC"),
   };
 

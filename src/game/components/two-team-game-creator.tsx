@@ -44,22 +44,24 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
         name="teamInstanceIds"
         value={`${awayTeam.id},${homeTeam.id}`}
       />
-      <DatePicker
-        id={startDateField}
-        name={startDateField}
-        label="Start Date"
-        variant="bordered"
-        granularity="minute"
-        hideTimeZone
-        showMonthAndYearPickers
-        isRequired
-        defaultValue={
-          gameInput.startDate == undefined
-            ? now(getLocalTimeZone())
-            : gameInput.startDate
-        }
-      />
-      <div className="mb-32 grid text-center lg:max-w-24xl lg:w-full lg:mb-0 lg:grid-cols-2 lg:text-left">
+      <div>
+        <DatePicker
+          id={startDateField}
+          name={startDateField}
+          label="Start Date"
+          variant="bordered"
+          granularity="minute"
+          hideTimeZone
+          showMonthAndYearPickers
+          isRequired
+          defaultValue={
+            gameInput.startDate == undefined
+              ? now(getLocalTimeZone())
+              : gameInput.startDate
+          }
+        />
+      </div>
+      <div className="mb-3 grid grid-cols-2 text-center w-full">
         <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
           <h2 className="mt-4 mb-4 text-4xl">Away Team</h2>
           <TeamInstanceCreator

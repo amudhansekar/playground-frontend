@@ -13,7 +13,7 @@ function TwoTeamGameDetail(props: Props): JSX.Element {
   const homeTeam = getTeamByPosition(game, TwoTeamGameTeamPosition.HOME);
 
   return (
-    <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-2 lg:text-left">
+    <div className="mt-8 grid grid-cols-2 text-center w-full">
       <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
         <h2 className="mb-3 text-2xl font-semibold">Away Team</h2>
         <h3>{awayTeam !== undefined && awayTeam.name}</h3>

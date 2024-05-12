@@ -1,5 +1,5 @@
 import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
-import { getCurrentPlayerServer } from "@/common/util/player-util";
+import { getCurrentPlayerFromServer } from "@/common/util/player-util";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -9,10 +9,10 @@ async function ProfilePage() {
     redirect("api/auth/signin");
   }
 
-  const player = await getCurrentPlayerServer();
+  const player = await getCurrentPlayerFromServer(session);
 
   return (
-    <div className="flex flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center justify-between m-24">
       {player === undefined ? (
         <Link href="/player">Create your player</Link>
       ) : (

@@ -21,7 +21,7 @@ function UserNavbarSelection(props: Props) {
   const { session } = props;
   const userName = session?.user.name === null ? undefined : session?.user.name;
   return session !== null ? (
-    <NavbarItem className="hidden lg:flex">
+    <NavbarItem>
       <Dropdown>
         <DropdownTrigger>
           <Avatar showFallback name={userName} />
@@ -37,7 +37,7 @@ function UserNavbarSelection(props: Props) {
       </Dropdown>
     </NavbarItem>
   ) : (
-    <NavbarItem className="hidden lg:flex">
+    <NavbarItem>
       <Link href="/api/auth/signin">
         <Button color="primary" variant="flat">
           Sign In

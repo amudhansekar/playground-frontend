@@ -1,6 +1,7 @@
 "use client";
 
 import { isAuthenticated } from "@/common/auth/auth-util";
+import SubmitButton from "@/common/components/submit-button/submit-button";
 import { Button, DateInput } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -27,7 +28,7 @@ function GameReadEditSwitcher(props: Props): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center justify-between m-24">
       <h1 className="mb-3 text-2xl font-semibold">Game</h1>
       {renderGameDisplay(game, isAuthenticated(status), editing, toggleEditing)}
     </div>
@@ -54,14 +55,16 @@ function renderGameDisplay(
       <>
         <form action={startGame}>
           <input hidden id={idField} name={idField} value={game.id} readOnly />
-          <Button type="submit">Start Game</Button>
+          <SubmitButton text="Start Game" />
         </form>
         <Button onPress={toggleEditing}>Edit</Button>
-        <DateInput
-          label="Start date"
-          isReadOnly
-          defaultValue={game.startDate}
-        />
+        <div>
+          <DateInput
+            label="Start date"
+            isReadOnly
+            defaultValue={game.startDate}
+          />
+        </div>
         <GameDetailFactory game={game} />
       </>
     );

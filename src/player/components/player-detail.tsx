@@ -23,7 +23,7 @@ function PlayerDetail(props: Props) {
   );
 
   return (
-    <div className="flex flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center justify-between m-24">
       <Card className="max-w-[340px]">
         <CardHeader className="justify-between">
           <User
@@ -41,12 +41,16 @@ function PlayerDetail(props: Props) {
           <p>Weight: {player.weight}</p>
         </CardBody>
       </Card>
-
-      <h2 className="mb-3 text-2xl font-semibold my-5">Previous Games</h2>
-      <GamesTable gameConnection={previousGameConnection} />
-
-      <h2 className="mb-3 text-2xl font-semibold my-5">Upcoming Games</h2>
-      <GamesTable gameConnection={upcomingGameConnection} />
+      <div className="mt-8 grid grid-cols-2 gap-x-2 text-center w-full">
+        <div>
+          <h2 className="mb-3 text-2xl font-semibold my-5">Previous Games</h2>
+          <GamesTable gameConnection={previousGameConnection} />
+        </div>
+        <div>
+          <h2 className="mb-3 text-2xl font-semibold my-5">Upcoming Games</h2>
+          <GamesTable gameConnection={upcomingGameConnection} />
+        </div>
+      </div>
     </div>
   );
 }
