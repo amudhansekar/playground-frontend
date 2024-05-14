@@ -5,6 +5,9 @@ import TeamInstance, {
 } from "@/team/model/team-instance";
 import { ZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 import GameApiResponseFullDto from "./game-api-response-full-dto";
+import Livestream, {
+  convertLivestreamApiResponseFullDtoToLivestream,
+} from "./livestream";
 
 interface Game {
   id: number;
@@ -18,6 +21,8 @@ interface Game {
   gameState: GameState;
 
   teamInstances: TeamInstance[];
+
+  livestreams: Livestream[];
 }
 
 function convertGameApiResponseFullDtoToGame(
@@ -32,6 +37,11 @@ function convertGameApiResponseFullDtoToGame(
       convertTeamInstanceApiResponseFullDtoToTeamInstance(teamInstance)
     ),
     endDate: !dto.endDate ? undefined : parseAbsoluteToLocal(dto.endDate),
+    livestreams: !dto.livestreams
+      ? []
+      : dto.livestreams.map((livestream) =>
+          convertLivestreamApiResponseFullDtoToLivestream(livestream)
+        ),
   };
 }
 

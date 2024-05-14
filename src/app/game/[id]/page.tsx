@@ -14,6 +14,7 @@ import {
   sportTypeField,
   startDateField,
   teamInstancesField,
+  urlField,
 } from "@/game/model/game-fields";
 import { endGame } from "@/game/server-action/game-event-actions";
 import {
@@ -61,7 +62,8 @@ async function GamePage({ params }: Params): Promise<JSX.Element> {
         },
       },
       [livestreamsField]: {
-        url: true,
+        [urlField]: true,
+        [endDateField]: true,
       },
     },
   };
@@ -91,6 +93,12 @@ function LiveGamePage(
 ) {
   return (
     <div className="flex flex-col items-center justify-between m-24">
+      {gameApiResponseFullDto.livestreams !== null &&
+        gameApiResponseFullDto.livestreams !== undefined &&
+        gameApiResponseFullDto.livestreams?.length > 0 &&
+        gameApiResponseFullDto.livestreams.map((livestream) => (
+          <iframe allowFullScreen key={livestream.url} src={livestream.url} />
+        ))}
       {session && (
         <form action={endGame}>
           <input
@@ -113,6 +121,12 @@ function LiveGamePage(
 function CompleteGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   return (
     <div className="flex flex-col items-center justify-between m-24">
+      {gameApiResponseFullDto.livestreams !== null &&
+        gameApiResponseFullDto.livestreams !== undefined &&
+        gameApiResponseFullDto.livestreams?.length > 0 &&
+        gameApiResponseFullDto.livestreams.map((livestream) => (
+          <iframe allowFullScreen key={livestream.url} src={livestream.url} />
+        ))}
       <GameStatisticTableFactory
         gameApiResponseFullDto={gameApiResponseFullDto}
       />

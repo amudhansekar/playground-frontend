@@ -18,6 +18,12 @@ interface Props {
   basketballBoxScoreDtos: BasketballBoxScoreApiResponseFullDto[];
 }
 
+function getCellStyle(authenticated: boolean) {
+  if (authenticated) {
+    return { backgroundColor: "#EBEBE4" };
+  }
+}
+
 function BasketballBoxScoreTable(props: Props) {
   const { basketballBoxScoreDtos } = props;
   const basketballBoxScores = basketballBoxScoreDtos.map((dto) =>
@@ -42,26 +48,27 @@ function BasketballBoxScoreTable(props: Props) {
       field: "fieldGoalsMade",
       headerName: "FGM",
       cellDataType: "number",
-      editable: authenticated,
       cellEditor: "agNumberCellEditor",
-      cellEditorParams: {
-        min: 0,
+      cellStyle: () => {
+        return getCellStyle(authenticated);
       },
     },
     {
       field: "fieldGoalsAttempted",
       headerName: "FGA",
       cellDataType: "number",
-      editable: authenticated,
       cellEditor: "agNumberCellEditor",
-      cellEditorParams: {
-        min: 0,
+      cellStyle: () => {
+        return getCellStyle(authenticated);
       },
     },
     {
       field: "fieldGoalPercentage",
       headerName: "FG%",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
     {
       field: "twoPointersMade",
@@ -87,6 +94,9 @@ function BasketballBoxScoreTable(props: Props) {
       field: "twoPointerPercentage",
       headerName: "2P%",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
     {
       field: "threePointersMade",
@@ -112,6 +122,9 @@ function BasketballBoxScoreTable(props: Props) {
       field: "threePointerPercentage",
       headerName: "3P%",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
     {
       field: "freeThrowsMade",
@@ -137,6 +150,9 @@ function BasketballBoxScoreTable(props: Props) {
       field: "freeThrowPercentage",
       headerName: "FT%",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
     {
       field: "offensiveRebounds",
@@ -162,6 +178,9 @@ function BasketballBoxScoreTable(props: Props) {
       field: "totalRebounds",
       headerName: "REB",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
     {
       field: "assists",
@@ -217,6 +236,9 @@ function BasketballBoxScoreTable(props: Props) {
       field: "points",
       headerName: "PTS",
       cellDataType: "number",
+      cellStyle: () => {
+        return getCellStyle(authenticated);
+      },
     },
   ];
   // Row Data: The data to be displayed.
@@ -266,22 +288,24 @@ function BasketballBoxScoreTable(props: Props) {
 
   // Container: Defines the grid's theme & dimensions.
   return (
-    <div
-      className="ag-theme-quartz"
-      style={{ width: "90rem", height: "15rem" }}
-    >
-      <AgGridReact
-        ref={gridRef}
-        rowData={rowData}
-        columnDefs={colDefs}
-        onCellValueChanged={onCellValueChanged}
-      />
+    <>
+      <div
+        className="ag-theme-quartz"
+        style={{ width: "90rem", height: "15rem" }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          rowData={rowData}
+          columnDefs={colDefs}
+          onCellValueChanged={onCellValueChanged}
+        />
+      </div>
       {authenticated && (
         <Button disabled={changedRowIds.size === 0} onPress={saveStatistics}>
           Save Changes
         </Button>
       )}
-    </div>
+    </>
   );
 }
 

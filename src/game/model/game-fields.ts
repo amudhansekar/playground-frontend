@@ -14,6 +14,7 @@ const teamInstancesField = "teamInstances";
 // Fields for response
 
 const livestreamsField = "livestreams";
+const urlField = "url";
 
 export {
   endDateField,
@@ -23,4 +24,5 @@ export {
   sportTypeField,
   startDateField,
   teamInstancesField,
+  urlField,
 };
