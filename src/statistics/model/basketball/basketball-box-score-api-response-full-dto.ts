@@ -2,47 +2,47 @@ import PlayerGameIdApiResponseFullDto from "../player-game-api-response-full-dto
 
 interface BasketballBoxScoreApiResponseFullDto
   extends PlayerGameIdApiResponseFullDto {
-  defensiveRebounds?: number;
+  defensiveRebounds: number | null;
 
-  offensiveRebounds?: number;
+  offensiveRebounds: number | null;
 
-  totalRebounds?: number;
+  totalRebounds: number | null;
 
-  assists?: number;
+  assists: number | null;
 
-  steals?: number;
+  steals: number | null;
 
-  blocks?: number;
+  blocks: number | null;
 
-  turnovers?: number;
+  turnovers: number | null;
 
-  personalFouls?: number;
+  personalFouls: number | null;
 
-  points?: number;
+  points: number | null;
 
-  fieldGoalsMade?: number;
+  fieldGoalsMade: number | null;
 
-  fieldGoalsAttempted?: number;
+  fieldGoalsAttempted: number | null;
 
-  fieldGoalPercentage?: number;
+  fieldGoalPercentage: number | null;
 
-  threePointersMade?: number;
+  threePointersMade: number | null;
 
-  threePointersAttempted?: number;
+  threePointersAttempted: number | null;
 
-  threePointerPercentage?: number;
+  threePointerPercentage: number | null;
 
-  twoPointersMade?: number;
+  twoPointersMade: number | null;
 
-  twoPointersAttempted?: number;
+  twoPointersAttempted: number | null;
 
-  twoPointerPercentage?: number;
+  twoPointerPercentage: number | null;
 
-  freeThrowsMade?: number;
+  freeThrowsMade: number | null;
 
-  freeThrowsAttempted?: number;
+  freeThrowsAttempted: number | null;
 
-  freeThrowPercentage?: number;
+  freeThrowPercentage: number | null;
 }
 
 export default BasketballBoxScoreApiResponseFullDto;

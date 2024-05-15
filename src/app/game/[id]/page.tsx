@@ -105,8 +105,7 @@ function LiveGamePage(
   return (
     <div className="flex flex-col items-center justify-between m-24">
       {gameApiResponseFullDto.livestreams !== null &&
-        gameApiResponseFullDto.livestreams !== undefined &&
-        gameApiResponseFullDto.livestreams?.length > 0 &&
+        gameApiResponseFullDto.livestreams.length > 0 &&
         gameApiResponseFullDto.livestreams.map((livestream) => (
           <iframe allowFullScreen key={livestream.url} src={livestream.url} />
         ))}
@@ -133,8 +132,7 @@ function CompleteGamePage(gameApiResponseFullDto: GameApiResponseFullDto) {
   return (
     <div className="flex flex-col items-center justify-between m-24">
       {gameApiResponseFullDto.livestreams !== null &&
-        gameApiResponseFullDto.livestreams !== undefined &&
-        gameApiResponseFullDto.livestreams?.length > 0 &&
+        gameApiResponseFullDto.livestreams.length > 0 &&
         gameApiResponseFullDto.livestreams.map((livestream) => (
           <iframe allowFullScreen key={livestream.url} src={livestream.url} />
         ))}

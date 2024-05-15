@@ -44,7 +44,7 @@ async function NewPlayerPage() {
           label="Age"
           className="my-5"
           defaultValue={
-            player?.age === undefined ? undefined : player.age.toString()
+            player?.age === null ? undefined : player?.age.toString()
           }
         />
         <Input
@@ -54,7 +54,7 @@ async function NewPlayerPage() {
           label="Height (cm)"
           className="my-5"
           defaultValue={
-            player?.height === undefined ? undefined : player.height.toString()
+            player?.height === null ? undefined : player?.height.toString()
           }
         />
         <Input
@@ -64,7 +64,7 @@ async function NewPlayerPage() {
           label="Weight (kg)"
           className="my-5"
           defaultValue={
-            player?.weight === undefined ? undefined : player.weight.toString()
+            player?.weight === null ? undefined : player?.weight.toString()
           }
         />
         <SubmitButton />

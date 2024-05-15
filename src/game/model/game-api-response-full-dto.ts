@@ -14,9 +14,9 @@ interface GameApiResponseFullDto {
 
   teamInstances: TeamInstanceApiResponseFullDto[];
 
-  endDate?: string | null;
+  endDate: string | null;
 
-  livestreams?: LivestreamApiResponseFullDto[] | null;
+  livestreams: LivestreamApiResponseFullDto[] | null;
 }
 
 export default GameApiResponseFullDto;

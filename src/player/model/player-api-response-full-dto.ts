@@ -5,11 +5,11 @@ interface PlayerApiResponseFullDto {
 
   lastName: string;
 
-  age?: number;
+  age: number | null;
 
-  height?: number;
+  height: number | null;
 
-  weight?: number;
+  weight: number | null;
 }
 
 export default PlayerApiResponseFullDto;
