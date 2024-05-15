@@ -47,7 +47,10 @@ function renderGameDisplay(
     return (
       <>
         <Button onPress={toggleEditing}>Cancel</Button>
-        <GameCreatorFactory gameInput={convertGameToGameInput(game)} />
+        <GameCreatorFactory
+          gameInput={convertGameToGameInput(game)}
+          toggleEditing={toggleEditing}
+        />
       </>
     );
   } else {

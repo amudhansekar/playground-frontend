@@ -1,4 +1,4 @@
-import { query } from "@/common/api/graphql-request";
+import { ErrorType, query } from "@/common/api/graphql-request";
 import getPlaygroundServerSession from "@/common/auth/get-playground-server-session";
 import SubmitButton from "@/common/components/submit-button/submit-button";
 import { GameState } from "@/common/constants/game-constants";
@@ -30,6 +30,7 @@ import {
   idField as teamInstanceIdField,
 } from "@/team/model/team-instance-fields";
 import { Session } from "next-auth";
+import { notFound } from "next/navigation";
 
 interface Params {
   params: { id: number };
@@ -37,6 +38,9 @@ interface Params {
 
 async function GamePage({ params }: Params): Promise<JSX.Element> {
   const { id } = params;
+  if (isNaN(id)) {
+    notFound();
+  }
 
   const session = await getPlaygroundServerSession();
 
@@ -68,8 +72,15 @@ async function GamePage({ params }: Params): Promise<JSX.Element> {
     },
   };
 
-  const gameData = await query(gameQuery);
-  const gameApiResponseFullDto: GameApiResponseFullDto = gameData.data.game;
+  const graphqlResponse = await query(gameQuery);
+  if (
+    graphqlResponse.errors != null &&
+    graphqlResponse.errors[0].extensions.errorType === ErrorType.NOT_FOUND
+  ) {
+    notFound();
+  }
+  const gameApiResponseFullDto: GameApiResponseFullDto =
+    graphqlResponse.data.game;
 
   switch (gameApiResponseFullDto.gameState) {
     case GameState.PENDING:

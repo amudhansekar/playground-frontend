@@ -10,10 +10,11 @@ import saveGame from "../server-action/save-game";
 
 interface Props {
   gameInput: GameInput;
+  toggleEditing?: () => void;
 }
 
 function TwoTeamGameCreator(props: Props): JSX.Element {
-  const { gameInput } = props;
+  const { gameInput, toggleEditing } = props;
   const [awayTeam, setAwayTeam] = useState(
     getTeamByPositionOrNewTeamInstance(
       gameInput,
@@ -30,7 +31,14 @@ function TwoTeamGameCreator(props: Props): JSX.Element {
   );
 
   return (
-    <form action={saveGame}>
+    <form
+      action={(formData) => {
+        saveGame(formData);
+        if (toggleEditing !== undefined) {
+          toggleEditing();
+        }
+      }}
+    >
       <input hidden id={idField} name={idField} value={gameInput.id} />
       <input
         hidden

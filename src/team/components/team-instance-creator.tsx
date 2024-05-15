@@ -1,3 +1,6 @@
+"use cient";
+
+import { ErrorType, GraphQLResponse } from "@/common/api/graphql-request";
 import { convertPlayerApiResponseFullDtoToPlayer } from "@/player/model/player";
 import { Button, Input } from "@nextui-org/react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -39,27 +42,43 @@ function TeamInstanceCreator(props: Props): JSX.Element {
   }
 
   const [currentPlayerId, setCurrentPlayerId] = useState<string | undefined>();
+  const [getPlayerErrorMessage, setGetPlayerErrorMessage] = useState<
+    string | undefined
+  >();
 
   async function handleAddPlayer() {
     // check that the player id is defined
     if (!currentPlayerId) {
       throw new Error("Player ID is required");
     }
+    const playerId = parseInt(currentPlayerId);
+    if (isNaN(playerId)) {
+      setGetPlayerErrorMessage("Player ID is invalid");
+      return;
+    }
 
     // first check if the id has been added already
     for (const player of teamInstance.players) {
-      if (player.id === Number.parseInt(currentPlayerId)) {
+      if (player.id === playerId) {
         throw new Error(
           "Player " + currentPlayerId + " has already been added"
         );
       }
     }
-
-    const playerId = parseInt(currentPlayerId);
     const response = await fetch(`/api/player/${playerId}`);
-    const graphqlData = await response.json();
+    const body = await response.json();
+    const graphqlResponse: GraphQLResponse = body.response;
+
+    if (
+      graphqlResponse.errors != null &&
+      graphqlResponse.errors[0].extensions.errorType === ErrorType.NOT_FOUND
+    ) {
+      setGetPlayerErrorMessage("Player Not Found");
+      return;
+    }
+    setGetPlayerErrorMessage(undefined);
     const player = convertPlayerApiResponseFullDtoToPlayer(
-      graphqlData.response.data.player
+      graphqlResponse.data.player
     );
 
     const newPlayerArray = [...teamInstance.players, player];
@@ -122,7 +141,10 @@ function TeamInstanceCreator(props: Props): JSX.Element {
         label="Add Player"
         placeholder="Enter the Player ID"
         value={currentPlayerId || ""}
-        onValueChange={setCurrentPlayerId}
+        onValueChange={(playerId) => {
+          setCurrentPlayerId(playerId);
+          setGetPlayerErrorMessage(undefined);
+        }}
       />
       <Button
         color="primary"
@@ -132,6 +154,7 @@ function TeamInstanceCreator(props: Props): JSX.Element {
       >
         Add Player
       </Button>
+      {getPlayerErrorMessage !== undefined && <p>{getPlayerErrorMessage}</p>}
       <TeamInstanceTable
         players={teamInstance.players}
         deletePlayer={handleDeletePlayer}

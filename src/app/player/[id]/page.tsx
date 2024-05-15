@@ -1,4 +1,8 @@
-import { GraphQLResponse, query } from "@/common/api/graphql-request";
+import {
+  ErrorType,
+  GraphQLResponse,
+  query,
+} from "@/common/api/graphql-request";
 import {
   Connection,
   edgesField,
@@ -35,6 +39,7 @@ import {
   idField as teamInstanceIdField,
 } from "@/team/model/team-instance-fields";
 import { EnumType } from "json-to-graphql-query";
+import { notFound } from "next/navigation";
 
 interface Params {
   params: { id: number };
@@ -42,6 +47,9 @@ interface Params {
 
 async function PlayerPage({ params }: Params) {
   const { id } = params;
+  if (isNaN(id)) {
+    notFound();
+  }
 
   const playerAndGamesQuery = {
     player: {
@@ -121,19 +129,25 @@ async function PlayerPage({ params }: Params) {
     },
   };
 
-  const response: GraphQLResponse = await query(
+  const graphqlResponse: GraphQLResponse = await query(
     playerAndGamesQuery,
     undefined,
     {
       cache: "no-store",
     }
   );
+  if (
+    graphqlResponse.errors != null &&
+    graphqlResponse.errors[0].extensions.errorType === ErrorType.NOT_FOUND
+  ) {
+    notFound();
+  }
   const playerApiResponseFullDto: PlayerApiResponseFullDto =
-    response.data.player;
+    graphqlResponse.data.player;
   const previousGames: Connection<GameApiResponseFullDto> =
-    response.data.previousGames;
+    graphqlResponse.data.previousGames;
   const upcomingGames: Connection<GameApiResponseFullDto> =
-    response.data.upcomingGames;
+    graphqlResponse.data.upcomingGames;
   return (
     <PlayerDetail
       playerApiResponseFullDto={playerApiResponseFullDto}
