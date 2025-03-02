@@ -16,9 +16,6 @@ export default async function HomePage() {
 function UnauthenticatedHomePage() {
   return (
     <div className="flex flex-col items-center justify-between m-24">
-      <head>
-        <meta name="google-site-verification" content="lxfyxiC4X8w1nHeAUknrizzcANCBMzdBg1nUVd0SdMI">
-      </head>
       <h1 className="mb-3 text-2xl font-semibold">Playground</h1>
       <h2 className="mb-3">Track Your Sports Experiences With Friends</h2>
       <Link href="/api/auth/signin">
@@ -38,9 +35,6 @@ async function AuthenticatedHomePage(props: Props) {
   const player = await getCurrentPlayerFromServer(session);
   return (
     <div className="flex flex-col items-center justify-between m-24">
-      <head>
-        <meta name="google-site-verification" content="lxfyxiC4X8w1nHeAUknrizzcANCBMzdBg1nUVd0SdMI">
-      </head>
       <h1 className="mb-3 text-2xl font-semibold">Playground</h1>
       <h2 className="mb-3">Track Your Sports Experiences With Friends</h2>
       <Link href="/game">

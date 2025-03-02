@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Playground",
   description: "Your games, your stats, your playground",
+  verification: {
+    google: "lxfyxiC4X8w1nHeAUknrizzcANCBMzdBg1nUVd0SdMI",
+  },
 };
 
 export default function RootLayout({
